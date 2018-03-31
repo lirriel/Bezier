@@ -1,0 +1,24 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0304
+header_name {.h}
+code_name {.cxx}
+class ViewUI {open
+} {
+  Function {ViewUI()} {open
+  } {
+    Fl_Window {} {open
+      xywh {67 135 734 569} type Double visible
+    } {
+      Fl_Input min {
+        label Formula
+        xywh {60 1 135 24} box GTK_THIN_DOWN_BOX
+      }
+      Fl_Box myWindow {
+        label label selected
+        xywh {25 25 670 516}
+        code0 {\#include "MyWindow.h"}
+        class MyWindow
+      }
+    }
+  }
+}
