@@ -16,22 +16,25 @@ std::vector<Vertex> ReadObj::Read_File(const char * filename) {
 
 void ReadObj::Write_File(const char * filename, std::vector<Vertex> model) {
 	ofstream myfile(filename, ios::trunc);
-	if (myfile.is_open())
-	{
+	
+	if (myfile.is_open()) {
 		int k = 1;
 		for (int i = 0; i < model.size(); i += 3) {
 			glm::vec3 normal = model.at(i).normal;
+
 			for (int j = 0; j < 3; j++) {
 				myfile << "v " << model.at(i + j).position.x << " ";
 				myfile << model.at(i + j).position.y << " ";
 				myfile << model.at(i + j).position.z << "\n";
 			}
+			
 			myfile << "vn " << normal.x << " " << normal.y << " " << normal.z << "\n";
 			myfile << "f " << i + 1 << "/" << "0/" << k << " ";
 			myfile << i + 2 << "/" << "0/" << k << " ";
 			myfile << i + 3 << "/" << "0/" << k << "\n";
 			k++;
 		}
+
 		myfile.close();
 	}
 	else {
@@ -41,24 +44,17 @@ void ReadObj::Write_File(const char * filename, std::vector<Vertex> model) {
 
 std::vector<Vertex> ReadObj::load_obj(const char* filename)
 {
-	// Очистка данных
 	buffer.verticesI = 0;
 	buffer.indicesI = 0;
 
-	//Создание временного хранилища входящих данных, как только данные будут
-	//загружены в подходящий формат скопируем эти данные в вершинный и индексный буферы
 	vector<glm::vec3> Positions;
 	vector<glm::vec2> TexCoords;
 	vector<glm::vec3> Normals;
 
-	// Индексы для массивов
 	int PositionsI = 0;
 	int TexCoordsI = 0;
 	int NormalsI = 0;
 
-	// Ввод данных из файла
-	//char fname[256];
-	//strcpy(fname,Edit1->Text.c_str());
 	WCHAR strCommand[256] = { 0 };
 	wifstream InFile(filename);
 
@@ -70,11 +66,7 @@ std::vector<Vertex> ReadObj::load_obj(const char* filename)
 		if (!InFile)
 			break;
 
-		if (0 == wcscmp(strCommand, L"#"))
-		{
-			// Комментарий
-		}
-		else if (0 == wcscmp(strCommand, L"v"))
+		if (0 == wcscmp(strCommand, L"v"))
 		{
 			// Координаты
 			float x, y, z;

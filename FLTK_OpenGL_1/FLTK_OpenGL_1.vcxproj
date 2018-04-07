@@ -89,20 +89,20 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="3DMath.cpp" />
-    <ClCompile Include="BezierCurve.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MyWindow.cpp" />
     <ClCompile Include="Parser.cpp" />
     <ClCompile Include="ReadFile.cpp" />
+    <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3DMath.h" />
-    <ClInclude Include="BezierCurve.h" />
     <ClInclude Include="Buffer.h" />
     <ClInclude Include="MyWindow.h" />
     <ClInclude Include="Parser.h" />
     <ClInclude Include="point.h" />
     <ClInclude Include="ReadFile.h" />
+    <ClInclude Include="Utils.h" />
     <ClInclude Include="Vertex.h" />
   </ItemGroup>
   <ItemGroup>

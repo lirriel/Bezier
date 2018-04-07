@@ -40,7 +40,7 @@ void checkBox(Fl_Widget* w, void* d) {
 void checkBox_X(Fl_Widget* w, void* d) {
 	Fl_Check_Button *check = (Fl_Check_Button*)w;
 	MyWindow *sw = (MyWindow *)d;
-	sw->isX = (bool)check->value();
+	sw->is_X = (bool)check->value();
 	sw->bezier = false;
 	sw->redraw();
 }
@@ -50,7 +50,7 @@ void checkBox_Bezier(Fl_Widget* w, void* d) {
 	MyWindow *sw = (MyWindow *)d;
 	sw->bezier = (bool)check->value();
 	sw->draw_check = false;
-	sw->isX = false;
+	sw->is_X = false;
 	sw->redraw();
 }
 
@@ -60,7 +60,7 @@ void checkBox_Project(Fl_Widget* w, void* d) {
 	sw->projection = (bool)check->value();
 	sw->draw_check = false;
 	sw->bezier = false;
-	sw->isX = false;
+	sw->is_X = false;
 	sw->redraw();
 }
 

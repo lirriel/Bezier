@@ -1,12 +1,12 @@
 #include "MyWindow.h"
 
-#include <FL/Fl.H>              /* FLTK main       FLTK  */
+#include <FL/Fl.H>             
 #include <GL/freeglut.h>
 #include <sstream>
 #include <algorithm>
 
 #include "Parser.h"
-#include "BezierCurve.h"
+#include "Utils.h"
 
 #include <time.h>
 #include <stdlib.h>
@@ -27,12 +27,6 @@ GLfloat points3D[5][350][3];
 
 typedef std::vector<vec3> Layer;
 typedef std::vector<Layer> Layers;
-
-// remember the moving control name
-int MOVENAME = -1;
-
-// set up pick radius for detecting movement of a control point
-int pickRadius = 50;
 
 void MyWindow::display2DControlPolyline()
 {
@@ -83,7 +77,7 @@ void MyWindow::bezierOpenGL()
 }
 
 // mouse motion function
-void myMouseMove(int xPosition, int yPosition, const MyWindow* mw)
+void MyWindow::myMouseMove(int xPosition, int yPosition, const MyWindow* mw)
 {
 	printf("myMove");
 
@@ -121,7 +115,7 @@ std::vector<Vertex> MyWindow::Lathe(const std::vector<vec2>& pts, unsigned int s
 		for (unsigned int j = 0; j < circlePts.size(); ++j)
 		{
 			//layers[i][j] = vec3(circlePts[j] * pts[i].x, pts[i].y);
-			if (isX)
+			if (is_X)
 				//layers[i][j] = vec3(circlePts[j] * pts[i].y, pts[i].x);
 				layers[i][j] = vec3(pts[i].x, circlePts[j].x * pts[i].y, circlePts[j].y * pts[i].y);
 			else
@@ -247,16 +241,6 @@ void MyWindow::displayLines()
 	//glutSwapBuffers();
 }
 
-void replaceAll(std::string& str, const std::string& from, const std::string& to) {
-	if (from.empty())
-		return;
-	size_t start_pos = 0;
-	while ((start_pos = str.find(from, start_pos)) != std::string::npos) {
-		str.replace(start_pos, from.length(), to);
-		start_pos += to.length(); // In case 'to' contains 'from', like replacing 'x' with 'yx'
-	}
-}
-
 void MyWindow::formula(string line) {
 	boundMax = 0;
 	lines = line;
@@ -270,7 +254,7 @@ void MyWindow::formula(string line) {
 		string line1 = line;
 		std::ostringstream strs;
 		strs << i;
-		replaceAll(line1, "x", strs.str());
+		Utils::replaceAll(line1, "x", strs.str());
 		Parser parser(line1.c_str());
 		auto p = parser.eval(parser.parse());
 		if (abs(p) > boundMax) boundMax = abs(p);
@@ -286,10 +270,10 @@ void MyWindow::formula(string line) {
 	}
 	else
 		points_1.swap(pts);
-	if (isX)
-		std::sort(points_1.begin(), points_1.end(), my_cmp_x);
+	if (is_X)
+		std::sort(points_1.begin(), points_1.end(), Utils::my_cmp_x);
 	else 
-		std::sort(points_1.begin(), points_1.end(), my_cmp);
+		std::sort(points_1.begin(), points_1.end(), Utils::my_cmp);
 
 	for (size_t i = 0; i < points_1.size(); i += stepHeight){
 		pts1.push_back(vec2(points_1.at(i).x, points_1.at(i).y));
@@ -308,24 +292,6 @@ void MyWindow::formula(string line) {
 	//int x; 
 }
 
-GLfloat factorial(GLfloat n) {
-	return (n == 1 || n == 0) ? 1 : factorial(n - 1) * n;
-}
-
-GLfloat coef(GLfloat n, GLfloat k) {
-	if (k == 0) return 0;
-	return factorial(n) / (factorial(k) * factorial(n - k));
-}
-
-GLfloat MyWindow::bernstein(GLfloat u, int i, int n)
-{
-	GLfloat nChoosei = coef(n, i);
-	GLfloat ui = pow(u, i);
-	GLfloat oneMinusu = pow(1.0 - u, n - i);
-
-	return (nChoosei * ui * oneMinusu);
-}
-
 void MyWindow::bezierF()
 {
 	glLineWidth(2.0);
@@ -342,7 +308,7 @@ void MyWindow::bezierF()
 
 		for (int i = 0; i < pointsNumber; i++)
 		{
-			GLfloat b = bernstein(u, i, pointsNumber-1);
+			GLfloat b = Utils::bernstein(u, i, pointsNumber-1);
 			x += b * ctrlPoints[i][0];
 			y += b * ctrlPoints[i][1];
 		}
@@ -509,16 +475,6 @@ int MyWindow::handle(int event) {
 MyWindow::~MyWindow(){
 }
 
-bool MyWindow::my_cmp(const point & a, const point & b)
-{
-	return a.y < b.y;
-}
-
-bool MyWindow::my_cmp_x(const point & a, const point & b)
-{
-	return a.x < b.x;
-}
-
 void MyWindow::InitializeGL()
 {
 	glClearColor(.1f, .1f, .1f, 1);
@@ -641,7 +597,7 @@ std::vector<glm::vec2> MyWindow::toVec2(std::vector<point> points)
 		points[i].y = y * rate;
 		//pts.push_back(vec2(x, y));
 	}
-	/*if (isX)
+	/*if (is_X)
 		std::sort(points.begin(), points.end(), my_cmp_x);
 	else
 		std::sort(points.begin(), points.end(), my_cmp);*/
@@ -687,14 +643,14 @@ void MyWindow::DrawFromBezier() {
 		p.y = ctrlPoints[i][1];
 		vp.push_back(p);
 	}
-	if (isX)
-		std::sort(points_1.begin(), points_1.end(), my_cmp_x);
+	if (is_X)
+		std::sort(points_1.begin(), points_1.end(), Utils::my_cmp_x);
 	else
-		std::sort(points_1.begin(), points_1.end(), my_cmp);
-	if (isX)
-		std::sort(vp.begin(), vp.end(), my_cmp_x);
+		std::sort(points_1.begin(), points_1.end(), Utils::my_cmp);
+	if (is_X)
+		std::sort(vp.begin(), vp.end(), Utils::my_cmp_x);
 	else
-		std::sort(vp.begin(), vp.end(), my_cmp);
+		std::sort(vp.begin(), vp.end(), Utils::my_cmp);
 
 	vector<vec2> pts1;
 	for (size_t i = 0; i < points_1.size(); i += stepHeight) {

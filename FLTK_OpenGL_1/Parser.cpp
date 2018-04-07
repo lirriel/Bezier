@@ -1,6 +1,3 @@
-//
-// Created by MiBook on 25.03.2018.
-//
 #define _XOPEN_SOURCE 600
 
 #include <string>
@@ -21,7 +18,7 @@ std::string Parser::parse_token() {
     }
 
     static const std::string tokens[] =
-            { "+", "-", "^", "*", "/", "mod", "abs", "sin", "cos", "(", ")" };
+            { "+", "-", "^", "*", "/", "mod", "abs", "sin", "cos", "log", "tan", "ctg", "atan", "exp", "(", ")" };
     for (auto& t : tokens) {
         if (std::strncmp(input, t.c_str(), t.size()) == 0) {
             input += t.size();
@@ -53,6 +50,11 @@ double Parser::eval(const Expression& e) {
 		if (e.token == "abs") return abs(a);
 		if (e.token == "sin") return sin(a * M_PI / 180);
 		if (e.token == "cos") return cos(a * M_PI / 180);
+		if (e.token == "tan") return tan(a * M_PI / 180);
+		if (e.token == "atan") return atan(a * M_PI / 180);
+		if (e.token == "ctg") return cos(a * M_PI / 180) / sin(a * M_PI / 180);
+		if (e.token == "log") return log(a);
+		if (e.token == "exp") return exp(a);
 		throw std::runtime_error("Unknown unary operator");
 	}
 
