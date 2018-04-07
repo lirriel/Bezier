@@ -252,5 +252,6 @@ int main(int argc, char** args)
 	*/
 	MyFlWindow myFlWindow(1200, 700, "Hi");
 	myFlWindow.show();
+	myFlWindow.myWindow->show();
 	return (Fl::run());
 }

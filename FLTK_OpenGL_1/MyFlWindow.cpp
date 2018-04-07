@@ -2,11 +2,16 @@
 #include "MyWindow.h"
 #include <iostream>
 #include "ReadFile.h"
+#include <glm\glm.hpp>
+#include <GL/freeglut.h>
+#include <FL\Fl.H>
+
+using namespace glm;
 
 std::string s = "";
 
 MyFlWindow::MyFlWindow(int W, int H, const char*L): Fl_Window(W, H, L) {
-	myWindow = new MyGlWindow(10, 10, 600, 600, "hi");
+	myWindow = new MyWindow(10, 10, 600, 600, "hi");
 
 	slider = new Fl_Hor_Slider(620 + 50, 370, 500 - 60, 30, "Color:");
 	slider->align(FL_ALIGN_LEFT);
@@ -53,23 +58,23 @@ MyFlWindow::MyFlWindow(int W, int H, const char*L): Fl_Window(W, H, L) {
 	Fl_Check_Button* project = new Fl_Check_Button(620 + 250, 150, 80, 30, "proj");
 	Fl_Button* saveModel = new Fl_Button(620 + 300, 150, 80, 30, "Save");
 
-	b->callback(field_callback, &myWindow);
+	b->callback(field_callback, myWindow);
 	formula->callback(get_int);
-	checkButton->callback(checkBox, &myWindow);
-	build->callback(set_build, &myWindow);
-	add->callback(add_formula, &myWindow);
-	min->callback(set_min, &myWindow);
-	max->callback(set_max, &myWindow);
-	step->callback(set_step, &myWindow);
-	sliderPerspective->callback(sides_p, &myWindow);
-	checkButton_x->callback(checkBox_X, &myWindow);
-	bezier->callback(checkBox_Bezier, &myWindow);
-	sliderSegments->callback(slider_segments, &myWindow);
-	input_N->callback(set_number_of_points, &myWindow);
-	drawBezier->callback(set_build_bezier, &myWindow);
-	sliderSteps->callback(slider_steps, &myWindow);
-	project->callback(checkBox_Project, &myWindow);
-	saveModel->callback(button_save, &myWindow);
+	checkButton->callback(checkBox, myWindow);
+	build->callback(set_build, myWindow);
+	add->callback(add_formula, myWindow);
+	min->callback(set_min, myWindow);
+	max->callback(set_max, myWindow);
+	step->callback(set_step, myWindow);
+	sliderPerspective->callback(sides_p, myWindow);
+	checkButton_x->callback(checkBox_X, myWindow);
+	bezier->callback(checkBox_Bezier, myWindow);
+	sliderSegments->callback(slider_segments, myWindow);
+	input_N->callback(set_number_of_points, myWindow);
+	drawBezier->callback(set_build_bezier, myWindow);
+	sliderSteps->callback(slider_steps, myWindow);
+	project->callback(checkBox_Project, myWindow);
+	saveModel->callback(button_save, myWindow);
 	end();
 }
 

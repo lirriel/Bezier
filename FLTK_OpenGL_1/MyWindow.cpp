@@ -174,7 +174,7 @@ std::vector<Vertex> MyWindow::Lathe(const std::vector<vec2>& pts, unsigned int s
 }
 
 
-MyWindow::MyWindow(int x, int y, int width, int height, char* title) 
+MyWindow::MyWindow(int x, int y, int width, int height, char* title = 0) 
          : Fl_Gl_Window(x, y, width, height, title) {
 	mode(FL_RGB | FL_ALPHA | FL_DEPTH | FL_DOUBLE);
 	std::vector<vec2> pts;
@@ -187,7 +187,8 @@ MyWindow::MyWindow(int x, int y, int width, int height, char* title)
 	pts.push_back(vec2(4, 3));
 	model = Lathe(pts, 32);
 	pointsNumber = 7;
-	end();
+
+	//end();
 	//formula("x-2");
 }
 
@@ -245,12 +246,12 @@ void MyWindow::displayLines()
 void MyWindow::formula(string line) {
 	boundMax = 0;
 	lines = line;
-	double min = MyWindow::min;
-	double max = MyWindow::max;
+	double _min = MyWindow::min;
+	double _max = MyWindow::max;
 	double step = MyWindow::step;
 	std::vector<point> pts;
 	std::vector<vec2> pts1;
-	for (double i = min; i <= max; i += step)
+	for (double i = _min; i <= _max; i += step)
 	{
 		string line1 = line;
 		std::ostringstream strs;
@@ -383,6 +384,7 @@ void MyWindow::addPoints(int n) {
 	pointsNumber += n;
 }
 
+
 int MyWindow::handle(int event) {
 	static int x, y;
 	static float rx, ry;
@@ -463,18 +465,17 @@ int MyWindow::handle(int event) {
 		return 1;  // Return 1 to get keyboard events
 	case FL_KEYBOARD:
 		// key in Fl::event_key(), ascii in Fl::event_text()
-		printf("Key: %s\n", Fl::event_text());
+		// printf("Key: %s\n", Fl::event_text());
 		return 0;  // return 1 input was understood
 	case FL_SHORTCUT:
 		// key in Fl::event_key(), ascii in Fl::event_text()
 		return 0;  // return 1 input was understood
 	default:
-		return 1;
+		// pass other events to the base class...
+		return Fl_Gl_Window::handle(event);;
 	}
 }
 
-MyWindow::~MyWindow(){
-}
 
 void MyWindow::InitializeGL()
 {
@@ -732,13 +733,17 @@ void MyWindow::drawByMouse() {
 
 void MyWindow::draw()
 {
-	if (!valid())
+	/*if (!valid())
 	{
-		valid(1);
 		glLoadIdentity();
 		glViewport(0, 0, w(), h());
 		glOrtho(-w(), w(), -h(), h(), -1, 1);
-	}
+	}*/
+	//glClearColor(0, 0, 0, 0.0);
+	//glClear(GL_COLOR_BUFFER_BIT);
+	//// Draw 'X' in fg color
+	//glColor3f(1, 1, 1);
+	
 	if (draw_check) {
 		drawByMouse();
 	}
@@ -752,5 +757,6 @@ void MyWindow::draw()
 		Draw3DModel();
 		DrawBounds();
 	}
+	
 }
 

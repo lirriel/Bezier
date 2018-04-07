@@ -9,48 +9,9 @@
 #include "MyWindow.h"
 #include <string>
 
-class MyGlWindow : public Fl_Gl_Window {
-	double fg;                       // foreground brightness
-	double bg;                       // background brightness
-									 // FIX OPENGL VIEWPORT
-									 //     Do this on init or when window's size is changed
-	void FixViewport(int W, int H) {
-		glLoadIdentity();
-		glViewport(0, 0, W, H);
-		glOrtho(-W, W, -H, H, -1, 1);
-	}
-	// DRAW METHOD
-	void draw() {
-		if (!valid()) { valid(1); FixViewport(w(), h()); }      // first time? init
-																// Clear screen to bg color
-		glClearColor(bg, bg, bg, 0.0);
-		glClear(GL_COLOR_BUFFER_BIT);
-		// Draw 'X' in fg color
-		glColor3f(fg, fg, fg);
-		glBegin(GL_LINE_STRIP); glVertex2f(w(), h()); glVertex2f(-w(), -h()); glEnd();
-		glBegin(GL_LINE_STRIP); glVertex2f(w(), -h()); glVertex2f(-w(), h()); glEnd();
-	}
-	// HANDLE WINDOW RESIZING
-	void resize(int X, int Y, int W, int H) {
-		Fl_Gl_Window::resize(X, Y, W, H);
-		FixViewport(W, H);
-		redraw();
-	}
-public:
-	// OPENGL WINDOW CONSTRUCTOR
-	MyGlWindow(int X, int Y, int W, int H, const char*L = 0) : Fl_Gl_Window(X, Y, W, H, L) {
-		fg = 1.0;
-		bg = 0.0;
-		end();
-	}
-	void SetBrightness(double new_fg, double new_bg)
-	{
-		fg = new_fg; bg = new_bg; redraw();
-	}
-};
-
 class MyFlWindow: public Fl_Window {
-	MyGlWindow* myWindow;
+public:
+	MyWindow* myWindow;
 	Fl_Hor_Slider* slider;
 	Fl_Hor_Slider* sliderSteps;
 	Fl_Hor_Slider* sliderPerspective;

@@ -17,7 +17,6 @@ class MyWindow : public Fl_Gl_Window
 {
 public:
 	MyWindow(int x, int y, int width, int height, char* title);
-	virtual ~MyWindow();
 	int handle(int event);
 	virtual void draw();
 
@@ -31,9 +30,12 @@ public:
 	
 	void BuildNew();
 
+	void myMouseMove(int xPosition, int yPosition, const MyWindow* mw);
+	void myPick(int state, int xPosition, int yPosition);
+
 ////////////////////////////////////////////
 	int color;
-	double min = 0.0;
+	double min = -10.0;
 	double max = 10.0;
 	double step = 1.0;
 
@@ -44,11 +46,11 @@ public:
 	std::string lines = "sin(x)";
 	
 	// flags
-	bool draw_check;
-	bool append;
-	bool is_X;
-	bool bezier;
-	bool projection;
+	bool draw_check = false;
+	bool append = false;
+	bool is_X = false;
+	bool bezier = false;
+	bool projection = false;
 
 	// data for model
 	std::vector<point> points;
@@ -71,10 +73,8 @@ private:
 	void bezierF();
 	void Draw3DModel();
 	std::vector<glm::vec2> toVec2(std::vector<point> points);
-	void myPick(int state, int xPosition, int yPosition);
 	void drawCircle(float radius, float x1, float y1);
 	void displayLines();
-	void myMouseMove(int xPosition, int yPosition, const MyWindow* mw);
 	void drawProjection();
 	void drawBezier();
 	void drawByMouse();
@@ -83,12 +83,13 @@ private:
 	float rotate = 0.0;
 	float start = 0.0;
 	float z_dep = 0.0;
-
+public:
 	int poi_size = 0;
 	int poi_arr[100][2];
 	int m_x = 0;
 	int m_y = 0;
 
+public:
 	// flag
 	bool first = true;
 	int rubber_band_on = 0.0;
