@@ -174,8 +174,8 @@ std::vector<Vertex> MyWindow::Lathe(const std::vector<vec2>& pts, unsigned int s
 }
 
 
-MyWindow::MyWindow(int width, int height, char* title) 
-         : Fl_Gl_Window(width, height, title){
+MyWindow::MyWindow(int x, int y, int width, int height, char* title) 
+         : Fl_Gl_Window(x, y, width, height, title) {
 	mode(FL_RGB | FL_ALPHA | FL_DEPTH | FL_DOUBLE);
 	std::vector<vec2> pts;
 	pts.push_back(vec2(0.1, -3));
@@ -187,6 +187,7 @@ MyWindow::MyWindow(int width, int height, char* title)
 	pts.push_back(vec2(4, 3));
 	model = Lathe(pts, 32);
 	pointsNumber = 7;
+	end();
 	//formula("x-2");
 }
 
@@ -667,80 +668,85 @@ void MyWindow::DrawFromBezier() {
 	model.swap(model1);
 }
 
+void MyWindow::drawProjection() {
+	glLoadIdentity();
+	glViewport(0, 0, w(), h());
+	glMatrixMode(GL_PROJECTION);
+	glPolygonMode(GL_BACK, GL_LINE);
+	glLoadIdentity();
+	glOrtho(0, w(), 0, h(), -1, 1);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	Projection();
+}
+
+void MyWindow::drawBezier() {
+	glLoadIdentity();
+	glViewport(0, 0, w(), h());
+	glMatrixMode(GL_PROJECTION);
+	glPolygonMode(GL_BACK, GL_LINE);
+	glLoadIdentity();
+	glOrtho(0, w(), 0, h(), -1, 1);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	display2DControlPolyline();
+	display2DControlPoints();
+	//bezierOpenGL();
+	bezierF();
+	glFlush();
+}
+
+void MyWindow::drawByMouse() {
+	glLoadIdentity();
+	glViewport(0, 0, w(), h());
+	glMatrixMode(GL_PROJECTION);
+	glPolygonMode(GL_BACK, GL_LINE);
+	glLoadIdentity();
+	glOrtho(0, w(), 0, h(), -1, 1);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	//glClearColor(1.0, 1.0, 1.0, 1.0);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glBegin(GL_LINE_STRIP);
+	glColor3ub(20, 255, 170);
+	for (int i = 0; i < points.size(); i++)
+		glVertex3i(points[i].x, points[i].y, 0);
+	glEnd();
+
+	glBegin(GL_LINE_STRIP);
+	glColor3ub(255, 0, 0);
+	glVertex3i(0, h() / 2, 0);
+	glVertex3i(w(), h() / 2, 0);
+	glEnd();
+
+	glBegin(GL_LINE_STRIP);
+	glColor3ub(0, 255, 0);
+	glVertex3i(w() / 2, 0, 0);
+	glVertex3i(w() / 2, h(), 0);
+	glEnd();
+}
 
 void MyWindow::draw()
 {
-	if (draw_check) {
+	if (!valid())
+	{
+		valid(1);
 		glLoadIdentity();
 		glViewport(0, 0, w(), h());
-		glMatrixMode(GL_PROJECTION);
-		glPolygonMode(GL_BACK, GL_LINE);
-		glLoadIdentity();
-		glOrtho(0, w(), 0, h(), -1, 1);
-		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
-		//glClearColor(1.0, 1.0, 1.0, 1.0);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		glBegin(GL_LINE_STRIP);
-		glColor3ub(20, 255, 170);
-		for (int i = 0; i < points.size(); i++)
-		glVertex3i(points[i].x, points[i].y, 0);
-		glEnd();
-
-		glBegin(GL_LINE_STRIP);
-		glColor3ub(255, 0, 0);
-		glVertex3i(0, h()/2, 0);
-		glVertex3i(w(), h()/2, 0);
-		glEnd();
-
-		glBegin(GL_LINE_STRIP);
-		glColor3ub(0, 255, 0);
-		glVertex3i(w() / 2, 0, 0);
-		glVertex3i(w() / 2, h(), 0);
-		glEnd();
+		glOrtho(-w(), w(), -h(), h(), -1, 1);
+	}
+	if (draw_check) {
+		drawByMouse();
 	}
 	else if (bezier) {
-		glLoadIdentity();
-		glViewport(0, 0, w(), h());
-		glMatrixMode(GL_PROJECTION);
-		glPolygonMode(GL_BACK, GL_LINE);
-		glLoadIdentity();
-		glOrtho(0, w(), 0, h(), -1, 1);
-		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		display2DControlPolyline();
-		display2DControlPoints();
-		//bezierOpenGL();
-		bezierF();
-		glFlush();
-
-		/*auto nurbs = gluNewNurbsRenderer();
-		GLfloat knots[8] = {
-			0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0
-		};
-		gluBeginCurve(nurbs);
-		gluNurbsCurve(nurbs,
-			8, knots,
-			3,
-			&m_Placeholders[0][0],
-			4,
-			GL_MAP1_VERTEX_3);
-		gluEndCurve(nurbs);*/
+		drawBezier();
 	}
 	else if (projection) {
-		glLoadIdentity();
-		glViewport(0, 0, w(), h());
-		glMatrixMode(GL_PROJECTION);
-		glPolygonMode(GL_BACK, GL_LINE);
-		glLoadIdentity();
-		glOrtho(0, w(), 0, h(), -1, 1);
-		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		Projection();
+		drawProjection();
 	}
 	else {
 		Draw3DModel();

@@ -16,7 +16,7 @@
 class MyWindow : public Fl_Gl_Window
 {
 public:
-	MyWindow(int width, int height, char* title);
+	MyWindow(int x, int y, int width, int height, char* title);
 	virtual ~MyWindow();
 	int handle(int event);
 	virtual void draw();
@@ -75,6 +75,9 @@ private:
 	void drawCircle(float radius, float x1, float y1);
 	void displayLines();
 	void myMouseMove(int xPosition, int yPosition, const MyWindow* mw);
+	void drawProjection();
+	void drawBezier();
+	void drawByMouse();
 
 	////////////////////////////////////////
 	float rotate = 0.0;

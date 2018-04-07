@@ -18,13 +18,14 @@
 #include <fstream>  //библиотека для чтения файлов
 #include "ReadFile.h"
 #include "MyWindow.h"
+#include "MyFlWindow.h"
 
-std::string s = "";
+std::string ss = "";
 
 void get_int(Fl_Widget* i, void* v)
 {
-	s = ((Fl_Input*)i)->value();
-	std::cout << " T : " << s << std::endl;
+	ss = ((Fl_Input*)i)->value();
+	std::cout << " T : " << ss << std::endl;
 }
 
 void checkBox(Fl_Widget* w, void* d) {
@@ -105,8 +106,8 @@ void set_max(Fl_Widget* w, void *d)
 void field_callback(Fl_Widget* w, void *d)
 {
 	MyWindow *sw = (MyWindow *)d;
-	std::cout << " B : " << s << std::endl;
-	sw->formula(s);
+	std::cout << " B : " << ss << std::endl;
+	sw->formula(ss);
 	sw->redraw();
 }
 
@@ -165,6 +166,7 @@ void button_save(Fl_Widget* o, void* p) {
 
 int main(int argc, char** args)
 {
+	/*
 	//ReadObj readobj;
 	//std::vector<Vertex> model = readobj.Read_File("hui.obj");
 	int x;
@@ -214,7 +216,7 @@ int main(int argc, char** args)
 	Fl_Check_Button* project = new Fl_Check_Button(250, 150, 80, 30, "proj");
 	Fl_Button* saveModel = new Fl_Button(300, 150, 80, 30, "Save");
 
-	MyWindow myWindow(600, 600, "Tutorial");
+	MyWindow myWindow(0, 0, 600, 600, "Tutorial");
 	//myWindow.model = model;
 	
 	slider.callback(sides_cb, &myWindow);
@@ -247,6 +249,8 @@ int main(int argc, char** args)
 	window.show();
 
 	Fl::run();
-	
-	return 0;
+	*/
+	MyFlWindow myFlWindow(1200, 700, "Hi");
+	myFlWindow.show();
+	return (Fl::run());
 }

@@ -90,6 +90,7 @@
   <ItemGroup>
     <ClCompile Include="3DMath.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MyFlWindow.cpp" />
     <ClCompile Include="MyWindow.cpp" />
     <ClCompile Include="Parser.cpp" />
     <ClCompile Include="ReadFile.cpp" />
@@ -98,6 +99,7 @@
   <ItemGroup>
     <ClInclude Include="3DMath.h" />
     <ClInclude Include="Buffer.h" />
+    <ClInclude Include="MyFlWindow.h" />
     <ClInclude Include="MyWindow.h" />
     <ClInclude Include="Parser.h" />
     <ClInclude Include="point.h" />
