@@ -100,7 +100,9 @@
     <ClInclude Include="BezierCurve.h" />
     <ClInclude Include="MyWindow.h" />
     <ClInclude Include="Parser.h" />
+    <ClInclude Include="point.h" />
     <ClInclude Include="ReadFile.h" />
+    <ClInclude Include="Vertex.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Text.obj" />

@@ -9,24 +9,9 @@
 	#include <vector>
 	#include <FL/math.h>
 	#include <string>
+#include "point.h"
+#include "Vertex.h"
 #pragma warning (pop)
-
-struct Vertex
-{
-	Vertex(const glm::vec3& position, const glm::vec3& normal)
-		: position(position)
-		, normal(normal)
-	{}
-	Vertex() {}
-	glm::vec3 position;
-	glm::vec3 normal;
-};
-
-struct point {
-	point() { x = 0; y = 0; }
-	double x;
-	double y;
-};
 
 class MyWindow : public Fl_Gl_Window
 {
@@ -40,6 +25,13 @@ public:
 	void DrawFromBezier();
 	void formula(std::string line);
 	int handle(int event);
+	void Projection();
+	void addPoints(int n);
+	MyWindow(int width, int height, char* title);
+	virtual ~MyWindow();
+	void BuildNew();
+
+////////////////////////////////////////////
 	int color;
 	double min=0;
 	double max=10;
@@ -54,16 +46,13 @@ public:
 	std::vector<point> points_1;
 	int perspective;
 	int segments = 32;
-	//void reModel();
 	bool bezier = false;
 	int pointsNumber;
-	void Projection();
-	void addPoints(int n);
 	int stepHeight = 1;
 	std::vector<Vertex> model;
 	bool projection = false;
+
 private:
-	//void DrawCube();
 	void DrawBounds();
 	void display2DControlPolyline();
 	void display2DControlPoints();
@@ -72,8 +61,9 @@ private:
 	void bezierF();
 	void Draw3DModel();
 	std::vector<glm::vec2> toVec2(std::vector<point> points);
-	double boundMax = 30;
 	void myPick(int state, int xPosition, int yPosition);
+	void drawCircle(float radius, float x1, float y1);
+	void displayLines();
 
 	////////////////////////////////////////
 	float rotate = 0.0;
@@ -88,15 +78,9 @@ private:
 	bool first = true;
 	int rubber_band_on = 0;
 	int down_flag = 0;
+
+	double boundMax = 30;
 	/////////////////////////////////////////
-	void drawCircle(float radius, float x1, float y1);
-	void displayLines();
-
-	public:
-		MyWindow(int width, int height, char* title);
-		virtual ~MyWindow();
-		void BuildNew();
-
 };
 
 #endif

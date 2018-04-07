@@ -14,8 +14,6 @@
 #include "3DMath.h"
 
 #include <iostream>
-//#include <vector>
-//#include <glm/glm.hpp>
 
 using namespace glm; 
 using namespace std;
