@@ -57,9 +57,19 @@ public:
 	bool projection = false;
 
 	// model colors
-	int model_r = 256;
+	int model_r = 250;
 	int model_g = 16;
-	int model_b = 76;
+	int model_b = 760;
+
+	// line colors
+	int line_r = 256;
+	int line_g = 160;
+	int line_b = 76;
+	double line_width = 1.0;
+
+	// actual size for draw by mouse
+	int max_X = w();
+	int max_Y = h();
 
 	// data for model
 	std::vector<point> points;

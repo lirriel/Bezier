@@ -46,6 +46,7 @@ void ReadObj::Write_File(const char * filename, std::vector<Vertex> model) {
 		cout << "Unable to open file";
 	}
 }
+
 /*
 unsigned int ReadObj::loadTexture(char const * path)
 {

@@ -263,11 +263,9 @@ void MyWindow::formula(string line) {
 		point p1;
 		p1.x = i; p1.y = p;
 		pts.push_back(p1);
-		//pts1.push_back(vec2(i, (int) p));
 	}
 	if (append) {
 		points_1.insert(points_1.end(), pts.begin(), pts.end());
-		//append = false;
 	}
 	else
 		points_1.swap(pts);
@@ -283,16 +281,8 @@ void MyWindow::formula(string line) {
 	}
 
 	std::vector<Vertex> model1;
-	//std::swap(model, model1);
 	model1 = Lathe(pts1, 32);
-	//std::vector<Vertex> model2;
-	/*if (append)
-	{
-		model.insert(model.end(), model1.begin(), model1.end());
-		append = false;
-	} else*/
-		model.swap(model1);
-	//int x; 
+	model.swap(model1);
 }
 
 void MyWindow::bezierF()
@@ -599,7 +589,6 @@ void MyWindow::Draw3DModel()
 void MyWindow::BuildNew()
 {
 	std::vector<Vertex> model1;
-	//std::swap(model, model1);
 	model1 = Lathe(toVec2(points), 32);
 	std::vector<Vertex> model2;
 	model.swap(model1);
@@ -608,7 +597,8 @@ void MyWindow::BuildNew()
 std::vector<glm::vec2> MyWindow::toVec2(std::vector<point> points)
 {
 	vector<vec2> pts;
-	double rate = MyWindow::max * 2 / w();
+	double rate_x = MyWindow::max_X * 2 / w();
+	double rate_y = MyWindow::max_Y * 2 / h();
 	for (size_t i = 0; i < points.size(); i++) {
 		printf("x: %d, y: %d\n", points.at(i).x, points.at(i).y);
 		double x = - w() / 2 + points.at(i).x;
@@ -616,17 +606,13 @@ std::vector<glm::vec2> MyWindow::toVec2(std::vector<point> points)
 		
 		if (abs(x) > boundMax) boundMax = abs(x);
 		if (abs(y) > boundMax) boundMax = abs(y);
-		points[i].x = x * rate;
-		points[i].y = y * rate;
-		//pts.push_back(vec2(x, y));
+		points[i].x = x * rate_x;
+		points[i].y = y * rate_y;
 	}
-	/*if (is_X)
-		std::sort(points.begin(), points.end(), my_cmp_x);
-	else
-		std::sort(points.begin(), points.end(), my_cmp);*/
-	//std::sort(points.begin(), points.end(), my_cmp);
+	
 	if (stepHeight >= points.size())
 		stepHeight = 1;
+
 	for (size_t i = 0; i < points.size(); i+=stepHeight) {
 		pts.push_back(vec2(points.at(i).x, points.at(i).y));
 	}
@@ -686,9 +672,7 @@ void MyWindow::DrawFromBezier() {
 	}*/
 
 	std::vector<Vertex> model1;
-	//std::swap(model, model1);
 	model1 = Lathe(pts1, 32);
-	std::vector<Vertex> model2;
 	model.swap(model1);
 }
 
@@ -732,11 +716,11 @@ void MyWindow::drawByMouse() {
 	glOrtho(0, w(), 0, h(), -1, 1);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	//glClearColor(1.0, 1.0, 1.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	glLineWidth(line_width);
 	glBegin(GL_LINE_STRIP);
-	glColor3ub(20, 255, 170);
+	glColor3ub(line_r, line_g, line_b);
 	for (int i = 0; i < points.size(); i++)
 		glVertex3i(points[i].x, points[i].y, 0);
 	glEnd();
@@ -755,18 +739,7 @@ void MyWindow::drawByMouse() {
 }
 
 void MyWindow::draw()
-{
-	/*if (!valid())
-	{
-		glLoadIdentity();
-		glViewport(0, 0, w(), h());
-		glOrtho(-w(), w(), -h(), h(), -1, 1);
-	}*/
-	//glClearColor(0, 0, 0, 0.0);
-	//glClear(GL_COLOR_BUFFER_BIT);
-	//// Draw 'X' in fg color
-	//glColor3f(1, 1, 1);
-	
+{	
 	if (draw_check) {
 		drawByMouse();
 	}

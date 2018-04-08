@@ -11,6 +11,7 @@
 #include <FL\Fl_Text_Buffer.H>
 #include <FL\Fl_Text_Display.H>
 #include <FL\Fl_Group.H>
+#include <FL\Fl_Native_File_Chooser.H>
 #include "MySlider.h"
 #include "MyWindow.h"
 #include <string>
@@ -55,13 +56,14 @@ public:
 	// tab pointer
 	int tab = 1;
 
+	Fl_Native_File_Chooser *fc;
 	Fl_Text_Buffer* tbuff; 
 	Fl_Text_Display* disp;
 public:
 	static void getFormula(Fl_Widget* i, void* v);
 	static void drawByMouseButtonCallback(Fl_Widget* w, void* d);
 	static void aroundXDraw(Fl_Widget* w, void* d);
-	static void checkBox_Bezier(Fl_Widget* w, void* d);
+	static void start_Bezier(Fl_Widget* w, void* d);
 	static void checkBox_Project(Fl_Widget* w, void* d);
 	static void set_min(Fl_Widget* w, void *d);
 	static void set_number_of_points(Fl_Widget* w, void *d);
@@ -74,10 +76,23 @@ public:
 	static void sides_p(Fl_Widget* o, void* p);
 	static void slider_segments(Fl_Widget* o, void* p);
 	static void slider_steps(Fl_Widget* o, void* p);
+
 	static void button_save(Fl_Widget* o, void* p);
+	static void button_save_as(Fl_Widget* o, void* p);
+	static void button_file_open(Fl_Widget* o, void* p);
+
 	static void setFigureR(Fl_Widget* o, void* p);
 	static void setFigureG(Fl_Widget* o, void* p);
 	static void setFigureB(Fl_Widget* o, void* p);
+
+	static void setLineR(Fl_Widget* o, void* p);
+	static void setLineG(Fl_Widget* o, void* p);
+	static void setLineB(Fl_Widget* o, void* p);
+	static void slider_line_width(Fl_Widget* o, void* p);
+
+	static void set_max_X(Fl_Widget* w, void *d);
+	static void set_max_Y(Fl_Widget* w, void *d);
+
 	static void setProjection_X(Fl_Widget* o, void* p);
 	static void setProjection_Y(Fl_Widget* o, void* p);
 	static void setProjection_Z(Fl_Widget* o, void* p);

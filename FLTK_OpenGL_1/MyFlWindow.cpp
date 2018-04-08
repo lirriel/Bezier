@@ -5,6 +5,7 @@
 #include <glm\glm.hpp>
 #include <GL/freeglut.h>
 #include <FL\Fl.H>
+#include <errno.h>	// errno
 #include <FL\Fl_Box.H>
 #include <FL\Fl_Choice.H>
 using namespace glm;
@@ -16,11 +17,14 @@ MyFlWindow::MyFlWindow(int W, int H, const char*L): Fl_Window(W, H, L) {
 	Fl_Color c = fl_rgb_color(117, 117, 117);
 	this->color(c);
 
+	fc = new Fl_Native_File_Chooser();
+	fc->filter("*.obj\n");
+
 	// Menu
 	Fl_Menu_Bar *menu = new Fl_Menu_Bar(0, 0, Fl::w(), 25);
-	menu->add("File/Load");
-	menu->add("File/Save");
-	menu->add("File/Save as");
+	menu->add("File/Load", 0, button_file_open, this);
+	menu->add("File/Save", 0, button_save, this);
+	menu->add("File/Save as", 0, button_save_as, this);
 	c = fl_rgb_color(66, 66, 66);
 
 	// Settings group
@@ -138,8 +142,11 @@ MyFlWindow::MyFlWindow(int W, int H, const char*L): Fl_Window(W, H, L) {
 			Fl_Box* lineColors = new Fl_Box(FL_DOWN_FRAME, drawByMouse->x() + 5, drawByMouse->y() + 20, drawByMouse->w() - 10, 45, "Line color");
 			{
 				redLine = new Fl_Input(lineColors->x() + 35, lineColors->y() + 10, 50, 25, "Red");
+				redLine->callback(setLineR, this);
 				greenLine = new Fl_Input(redLine->x() + redLine->w() + 50, lineColors->y() + 10, 50, 25, "Green");
+				greenLine->callback(setLineG, this);
 				blueLine = new Fl_Input(greenLine->x() + greenLine->w() + 50, lineColors->y() + 10, 50, 25, "Blue");
+				blueLine->callback(setLineB, this);
 			}
 			lineColors->align(FL_ALIGN_TOP_LEFT);
 
@@ -153,9 +160,13 @@ MyFlWindow::MyFlWindow(int W, int H, const char*L): Fl_Window(W, H, L) {
 			Fl_Input* rangeX = new Fl_Input(drawByMouse->x() + 70, sliderWidth->y() + sliderWidth->h() + 10, 60, 30, "X range");
 			rangeX->value("");
 			rangeX->color(FL_WHITE);
+			rangeX->callback(set_max_X, this);
+
 			Fl_Input* rangeY = new Fl_Input(drawByMouse->x() + 70, rangeX->y() + rangeX->h() + 10, 60, 30, "Y range");
 			rangeY->value("");
 			rangeY->color(FL_WHITE);
+			rangeY->callback(set_max_Y, this);
+
 			Fl_Button* draw_by_mouse_button = new Fl_Button(drawByMouse->x() + 10, rangeY->y() + rangeY->h() + 10, 200, 30, "START DRAWING");
 			draw_by_mouse_button->color(FL_WHITE);
 			draw_by_mouse_button->callback(drawByMouseButtonCallback, this);
@@ -170,12 +181,20 @@ MyFlWindow::MyFlWindow(int W, int H, const char*L): Fl_Window(W, H, L) {
 			Fl_Input* x_max = new Fl_Input(drawBezier->x() + 90, drawBezier->y() + 10, 60, 30, "X max value");
 			x_max->value("");
 			x_max->color(FL_WHITE);
+
 			Fl_Input* y_max = new Fl_Input(drawBezier->x() + 90, x_max->y() + x_max->h() + 10, 60, 30, "Y max value");
 			y_max->value("");
 			y_max->color(FL_WHITE);
-			Fl_Input* addDotsInput = new Fl_Input(drawBezier->x() + 120, y_max->h() + y_max->y() + 30, 50, 30, "Add dots number");
+
+			Fl_Button* drawBezierButton = new Fl_Button(drawBezier->x() + 20, y_max->h() + y_max->y() + 30, 150, 30, "START BEZIER LINE");
+			drawBezierButton->color(FL_WHITE);
+			drawBezierButton->callback(start_Bezier, this);
+
+			Fl_Input* addDotsInput = new Fl_Input(drawBezier->x() + 120, drawBezierButton->h() + drawBezierButton->y() + 30, 50, 30, "Add dots number");
+			addDotsInput->callback(set_number_of_points, this);
 			Fl_Button* addDotsButton = new Fl_Button(addDotsInput->x() + addDotsInput->w() + 10, addDotsInput->y(), 50, 30, "A D D");
 			addDotsButton->color(FL_WHITE);
+			addDotsButton->callback(set_number_of_points, this);
 		}
 		drawBezier->end();
 		drawBezier->color(c);
@@ -298,7 +317,7 @@ MyFlWindow::MyFlWindow(int W, int H, const char*L): Fl_Window(W, H, L) {
 	step->callback(set_step, myWindow);
 	sliderPerspective->callback(sides_p, myWindow);
 	checkButton_x->callback(checkBox_X, myWindow);
-	bezier->callback(checkBox_Bezier, myWindow);
+	bezier->callback(start_Bezier, myWindow);
 	sliderSegments->callback(slider_segments, myWindow);
 	input_N->callback(set_number_of_points, myWindow);
 	drawBezier->callback(set_build_bezier, myWindow);
@@ -334,14 +353,15 @@ void MyFlWindow::aroundXDraw(Fl_Widget * w, void * d)
 	MyWindow *sw = wind->myWindow;
 	wind->myWindow->is_X = (bool)check->value();
 	sw->bezier = false;
-	sw->formula(sw->formulaText);
+	if (wind->tab == 1)	
+		sw->formula(sw->formulaText);
 	sw->redraw();
 }
 
-void MyFlWindow::checkBox_Bezier(Fl_Widget* w, void* d) {
-	Fl_Check_Button *check = (Fl_Check_Button*)w;
-	MyWindow *sw = (MyWindow *)d;
-	sw->bezier = (bool)check->value();
+void MyFlWindow::start_Bezier(Fl_Widget* w, void* d) {
+	MyWindow *sw = ((MyFlWindow *)d)->myWindow;
+	((MyFlWindow *)d)->tab = 3;
+	sw->bezier = true;
 	sw->draw_check = false;
 	sw->is_X = false;
 	sw->redraw();
@@ -371,6 +391,7 @@ void MyFlWindow::set_number_of_points(Fl_Widget* w, void *d)
 {
 	MyFlWindow *sw = (MyFlWindow *)d;
 	sw->tab = 3;
+	sw->myWindow->bezier = true;
 	std::string s1 = ((Fl_Input*)w)->value();
 	int p = strtod(s1.c_str(), nullptr);
 	sw->myWindow->addPoints(p);
@@ -407,6 +428,11 @@ void MyFlWindow::draw_Big_Button(Fl_Widget* w, void *d)
 	}
 	else if (ww->tab == 2) {
 		model_from_draw(w, d);
+	}
+	else if (ww->tab == 3) {
+		sw->bezier = false;
+		sw->DrawFromBezier();
+		sw->redraw();
 	}
 }
 
@@ -462,9 +488,63 @@ void MyFlWindow::slider_steps(Fl_Widget* o, void* p) {
 }
 
 void MyFlWindow::button_save(Fl_Widget* o, void* p) {
-	MyWindow *sw = (MyWindow *)p;
-	ReadObj readobj;
-	readobj.Write_File("hui.obj", sw->model);
+	MyWindow *sw = ((MyFlWindow *)p)->myWindow;
+	MyFlWindow *app = (MyFlWindow*)p;
+	if (strlen(app->fc->filename()) == 0) {
+		button_save_as(o, p);
+	}
+	else {
+		ReadObj readobj;
+		readobj.Write_File("model_3d.obj", sw->model);
+	}
+}
+
+void MyFlWindow::button_save_as(Fl_Widget * o, void * p){
+	//MyFlWindow* app = (MyFlWindow*)p;
+	//app->fc->type(Fl_Native_File_Chooser::BROWSE_SAVE_FILE);	// need this if file doesn't exist yet
+	//app->fc->title("Save As");
+	//switch (app->fc->show()) {
+	//case -1: break;	// Error
+	//case  1: break; 	// Cancel
+	//default:		// Choice
+	//	app->fc->preset_file(app->fc->filename());
+	//	ReadObj obj;
+	//	obj.Write_File(app->fc->filename(), app->myWindow->model);
+	//	break;
+	//}
+	Fl_Native_File_Chooser *chooser = new Fl_Native_File_Chooser();
+	chooser->type(Fl_Native_File_Chooser::BROWSE_SAVE_FILE);   // 'saveas' browser
+	chooser->title("Save As..");                               // optional title for chooser window
+	chooser->directory("/var/tmp");                            // optional starting directory
+	chooser->preset_file("untitled.txt");                      // optional default filename
+	chooser->filter("Text Files\t*.txt");                      // optional filter
+	switch (chooser->show()) {
+	case -1:    // ERROR
+		fprintf(stderr, "*** ERROR show() failed:%s\n", chooser->errmsg());
+		break;
+	case 1:     // CANCEL
+		fprintf(stderr, "*** CANCEL\n");
+		break;
+	default:    // USER PICKED A FILE
+		fprintf(stderr, "Filename was '%s'\n", chooser->filename());
+		break;
+	}
+}
+
+void MyFlWindow::button_file_open(Fl_Widget * o, void * p) {
+	Fl_Native_File_Chooser native; 
+	MyFlWindow *app = (MyFlWindow*)p;
+	native.title("Open");
+	native.type(Fl_Native_File_Chooser::BROWSE_FILE);		// only picks files that exist
+	switch (native.show()) {
+		case -1: break;	// Error
+		case  1: break; 	// Cancel
+		default:		// Choice
+			ReadObj obj;
+			app->myWindow->model = obj.Read_File(native.filename());
+			//app->myWindow->redraw();
+			break;
+	}
 }
 
 void MyFlWindow::setFigureR(Fl_Widget * o, void * p) {
@@ -492,6 +572,59 @@ void MyFlWindow::setFigureB(Fl_Widget * o, void * p) {
 	int color = abs((int)strtod(s1.c_str(), nullptr)) % 256;
 	sw->model_b = color;
 	sw->redraw();
+}
+
+void MyFlWindow::setLineR(Fl_Widget * o, void * p) {
+	MyFlWindow* ww = (MyFlWindow *)p;
+	MyWindow* sw = ww->myWindow;
+	std::string s1 = ((Fl_Input*)o)->value();
+	int color = abs((int)strtod(s1.c_str(), nullptr)) % 256;
+	sw->line_r = color;
+	((MyFlWindow *)p)->tab = 2;
+	sw->redraw();
+}
+
+void MyFlWindow::setLineG(Fl_Widget * o, void * p) {
+	MyFlWindow* ww = (MyFlWindow *)p;
+	MyWindow* sw = ww->myWindow;
+	std::string s1 = ((Fl_Input*)o)->value();
+	int color = abs((int)strtod(s1.c_str(), nullptr)) % 256;
+	sw->line_g = color;
+	((MyFlWindow *)p)->tab = 2;
+	sw->redraw();
+}
+
+void MyFlWindow::setLineB(Fl_Widget * o, void * p) {
+	MyFlWindow* ww = (MyFlWindow *)p;
+	MyWindow* sw = ww->myWindow;
+	std::string s1 = ((Fl_Input*)o)->value();
+	int color = abs((int)strtod(s1.c_str(), nullptr)) % 256;
+	sw->line_b = color;
+	((MyFlWindow *)p)->tab = 2;
+	sw->redraw();
+}
+
+void MyFlWindow::slider_line_width(Fl_Widget * o, void * p) {
+	MyWindow *sw = ((MyFlWindow *)p)->myWindow;
+	sw->line_width = double(((Fl_Slider *)o)->value());
+	((MyFlWindow *)p)->tab = 2;
+	sw->redraw();
+}
+
+void MyFlWindow::set_max_X(Fl_Widget * w, void * d) {
+	MyFlWindow* ww = (MyFlWindow *)d;
+	ww->tab = 2;
+	MyWindow* sw = ww->myWindow;
+	std::string s1 = ((Fl_Input*)w)->value();
+	sw->max_X = abs(strtod(s1.c_str(), nullptr));
+}
+
+void MyFlWindow::set_max_Y(Fl_Widget * w, void * d) {
+	MyFlWindow* ww = (MyFlWindow *)d;
+	ww->tab = 2;
+	MyWindow* sw = ww->myWindow;
+	std::string s1 = ((Fl_Input*)w)->value();
+	sw->max_Y = abs(strtod(s1.c_str(), nullptr));
 }
 
 void MyFlWindow::setProjection_X(Fl_Widget * o, void * p) {
