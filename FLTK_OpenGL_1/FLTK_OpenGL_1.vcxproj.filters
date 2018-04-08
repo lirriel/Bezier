@@ -68,6 +68,9 @@
     <ClInclude Include="Tooltip.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MySlider.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Text.obj">

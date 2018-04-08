@@ -37,14 +37,14 @@ MyFlWindow::MyFlWindow(int W, int H, const char*L): Fl_Window(W, H, L) {
 
 		Fl_Box* drawDetails = new Fl_Box(FL_DOWN_FRAME, settings->x() + 5, colors->y() + colors->h() + 20, settings->w() - 10, 100, "Details");
 		{
-			sliderSteps = new Fl_Hor_Slider(drawDetails->x() + 5, drawDetails->y() + 20, drawDetails->w() - 10, 25, "Steps");
+			sliderSteps = new MySlider(drawDetails->x() + 5, drawDetails->y() + 20, drawDetails->w() - 10, 25, "Steps");
 			sliderSteps->align(FL_ALIGN_TOP_LEFT);
 			sliderSteps->value(1);
 			sliderSteps->step(1);
 			sliderSteps->bounds(1, 100);
 			sliderSteps->color(FL_WHITE);
 
-			sliderSegments = new Fl_Hor_Slider(drawDetails->x() + 5, sliderSteps->y() + sliderSteps->h() + 20, drawDetails->w() - 10, 25, "Segments");
+			sliderSegments = new MySlider(drawDetails->x() + 5, sliderSteps->y() + sliderSteps->h() + 20, drawDetails->w() - 10, 25, "Segments");
 			sliderSegments->align(FL_ALIGN_TOP_LEFT);
 			sliderSegments->value(32);
 			sliderSegments->step(1);
@@ -55,7 +55,7 @@ MyFlWindow::MyFlWindow(int W, int H, const char*L): Fl_Window(W, H, L) {
 
 		Fl_Box* viewSettings = new Fl_Box(FL_DOWN_FRAME, settings->x() + 5, drawDetails->y() + drawDetails->h() + 20, settings->w() - 10, 60, "View");
 		{
-			sliderPerspective = new Fl_Hor_Slider(viewSettings->x() + 5, viewSettings->y() + 20, viewSettings->w() - 10, 25, "Perspective");
+			sliderPerspective = new MySlider(viewSettings->x() + 5, viewSettings->y() + 20, viewSettings->w() - 10, 25, "Perspective");
 			sliderPerspective->align(FL_ALIGN_TOP_LEFT);
 			sliderPerspective->value(20);
 			sliderPerspective->step(1);
@@ -118,7 +118,7 @@ MyFlWindow::MyFlWindow(int W, int H, const char*L): Fl_Window(W, H, L) {
 			}
 			lineColors->align(FL_ALIGN_TOP_LEFT);
 
-			Fl_Hor_Slider* sliderWidth = new Fl_Hor_Slider(drawByMouse->x() + 5, lineColors->y() + lineColors->h() + 20, drawByMouse->w() - 10, 25, "Width");
+			MySlider* sliderWidth = new MySlider(drawByMouse->x() + 5, lineColors->y() + lineColors->h() + 20, drawByMouse->w() - 10, 25, "Width");
 			sliderSteps->align(FL_ALIGN_TOP_LEFT);
 			sliderSteps->value(1);
 			sliderSteps->step(1);
@@ -199,26 +199,26 @@ MyFlWindow::MyFlWindow(int W, int H, const char*L): Fl_Window(W, H, L) {
 	menu->addButton("Edit/Submenu/Aaa");
 	menu->addButton("Edit/Submenu/Bbb");
 
-	slider = new Fl_Hor_Slider(620 + 50, 370, 500 - 60, 30, "Color:");
+	slider = new MySlider(620 + 50, 370, 500 - 60, 30, "Color:");
 	slider->align(FL_ALIGN_LEFT);
 	slider->value(6);
 	slider->step(1);
 	slider->bounds(3, 300);
 	slider->callback(sides_cb);
 
-	sliderSteps = new Fl_Hor_Slider(620 + 50, 410, 500 - 80, 30, "Step:");
+	sliderSteps = new MySlider(620 + 50, 410, 500 - 80, 30, "Step:");
 	sliderSteps->align(FL_ALIGN_LEFT);
 	sliderSteps->value(1);
 	sliderSteps->step(1);
 	sliderSteps->bounds(1, 100);
 
-	sliderPerspective = new Fl_Hor_Slider(620 + 50, 320, 500 - 60, 30, "Persp:");
+	sliderPerspective = new MySlider(620 + 50, 320, 500 - 60, 30, "Persp:");
 	sliderPerspective->align(FL_ALIGN_LEFT);
 	sliderPerspective->value(-100);
 	sliderPerspective->step(1);
 	sliderPerspective->bounds(-700, 100);
 
-	sliderSegments = new Fl_Hor_Slider(620 + 70, 280, 500 - 80, 30, "Segments:");
+	sliderSegments = new MySlider(620 + 70, 280, 500 - 80, 30, "Segments:");
 	sliderSegments->align(FL_ALIGN_LEFT);
 	sliderSegments->value(32);
 	sliderSegments->step(1);

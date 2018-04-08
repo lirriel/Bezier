@@ -100,6 +100,7 @@
     <ClInclude Include="3DMath.h" />
     <ClInclude Include="Buffer.h" />
     <ClInclude Include="MyFlWindow.h" />
+    <ClInclude Include="MySlider.h" />
     <ClInclude Include="MyWindow.h" />
     <ClInclude Include="Parser.h" />
     <ClInclude Include="point.h" />

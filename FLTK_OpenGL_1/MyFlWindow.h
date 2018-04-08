@@ -2,7 +2,6 @@
 #define _MYFLWINDOW_H_
 
 #include <FL\Fl_Window.H>
-#include <FL\Fl_Hor_Slider.H>
 #include <FL\Fl_Input.H>
 #include <Fl\Fl_Round_Button.H>
 #include <Fl\Fl_Check_Button.H>
@@ -10,16 +9,17 @@
 #include <FL\Fl_Menu_Bar.H>
 #include <FL\Fl_Tabs.H>
 #include <FL\Fl_Group.H>
+#include "MySlider.h"
 #include "MyWindow.h"
 #include <string>
 
 class MyFlWindow: public Fl_Window {
 public:
 	MyWindow* myWindow;
-	Fl_Hor_Slider* slider;
-	Fl_Hor_Slider* sliderSteps;
-	Fl_Hor_Slider* sliderPerspective;
-	Fl_Hor_Slider* sliderSegments;
+	MySlider* slider;
+	MySlider* sliderSteps;
+	MySlider* sliderPerspective;
+	MySlider* sliderSegments;
 	Fl_Input* formula;
 	Fl_Input* min;
 	Fl_Input* max;
