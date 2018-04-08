@@ -47,7 +47,7 @@ public:
 	glm::ivec2 startRot;
 	glm::ivec2 curRot;
 	
-	std::string lines = "sin(x)";
+	std::string formulaText = "sin(x)";
 	
 	// flags
 	bool draw_check = false;
@@ -56,11 +56,17 @@ public:
 	bool bezier = false;
 	bool projection = false;
 
+	// model colors
+	int model_r = 256;
+	int model_g = 16;
+	int model_b = 76;
+
 	// data for model
 	std::vector<point> points;
 	std::vector<point> points_1;
 	
 	int perspective;
+	int projection_switcher = 1;
 	
 	int segments = 32;
 	
@@ -101,8 +107,6 @@ public:
 
 	double boundMax = 30.0;
 	/////////////////////////////////////////
-
-	
 
 	// remember the moving control name
 	int MOVENAME = -1;

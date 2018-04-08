@@ -8,6 +8,8 @@
 #include <FL\Fl_Button.H>
 #include <FL\Fl_Menu_Bar.H>
 #include <FL\Fl_Tabs.H>
+#include <FL\Fl_Text_Buffer.H>
+#include <FL\Fl_Text_Display.H>
 #include <FL\Fl_Group.H>
 #include "MySlider.h"
 #include "MyWindow.h"
@@ -46,19 +48,26 @@ public:
 	Fl_Input* blueLine;
 	//axis control
 	Fl_Round_Button* around_x;
-	Fl_Round_Button* around_y;
+	//projection
+	Fl_Round_Button* from_y;
+	Fl_Round_Button* from_x;
+	Fl_Round_Button* from_z;
+	// tab pointer
+	int tab = 1;
+
+	Fl_Text_Buffer* tbuff; 
+	Fl_Text_Display* disp;
 public:
-	static void get_int(Fl_Widget* i, void* v);
-	static void checkBox(Fl_Widget* w, void* d);
-	static void checkBox_X(Fl_Widget* w, void* d);
+	static void getFormula(Fl_Widget* i, void* v);
+	static void drawByMouseButtonCallback(Fl_Widget* w, void* d);
+	static void aroundXDraw(Fl_Widget* w, void* d);
 	static void checkBox_Bezier(Fl_Widget* w, void* d);
 	static void checkBox_Project(Fl_Widget* w, void* d);
 	static void set_min(Fl_Widget* w, void *d);
-	static void set_step(Fl_Widget* w, void *d);
 	static void set_number_of_points(Fl_Widget* w, void *d);
 	static void set_max(Fl_Widget* w, void *d);
-	static void field_callback(Fl_Widget* w, void *d);
-	static void set_build(Fl_Widget* w, void *d);
+	static void draw_Big_Button(Fl_Widget* w, void *d);
+	static void model_from_draw(Fl_Widget* w, void *d);
 	static void set_build_bezier(Fl_Widget* w, void *d);
 	static void add_formula(Fl_Widget* w, void *d);
 	static void sides_cb(Fl_Widget* o, void* p);
@@ -66,6 +75,17 @@ public:
 	static void slider_segments(Fl_Widget* o, void* p);
 	static void slider_steps(Fl_Widget* o, void* p);
 	static void button_save(Fl_Widget* o, void* p);
+	static void setFigureR(Fl_Widget* o, void* p);
+	static void setFigureG(Fl_Widget* o, void* p);
+	static void setFigureB(Fl_Widget* o, void* p);
+	static void setProjection_X(Fl_Widget* o, void* p);
+	static void setProjection_Y(Fl_Widget* o, void* p);
+	static void setProjection_Z(Fl_Widget* o, void* p);
+	static void tab_fromula(Fl_Widget* o, void* p);
+	static void tab_draw(Fl_Widget* o, void* p);
+	static void tab_bezier(Fl_Widget* o, void* p);
+	static void tab_base(Fl_Widget* o, void* p);
+
 
 private:
 

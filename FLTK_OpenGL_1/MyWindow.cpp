@@ -224,7 +224,7 @@ void MyWindow::displayLines()
 	// Show the X and Y coordinate location of the mouse 
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	// Draw the lines created by user 
+	// Draw the formulaText created by user 
 	glBegin(GL_LINES);
 	for (int i = 0; i<poi_size; i++) {
 		glVertex3f(poi_arr[i][0], poi_arr[i][1], 0);
@@ -244,7 +244,7 @@ void MyWindow::displayLines()
 
 void MyWindow::formula(string line) {
 	boundMax = 0;
-	lines = line;
+	formulaText = line;
 	double _min = MyWindow::min;
 	double _max = MyWindow::max;
 	double step = MyWindow::step;
@@ -276,7 +276,9 @@ void MyWindow::formula(string line) {
 	else 
 		std::sort(points_1.begin(), points_1.end(), Utils::my_cmp);
 
-	for (size_t i = 0; i < points_1.size(); i += stepHeight){
+	if (stepHeight >= points_1.size())
+		stepHeight = 1;
+	for (size_t i = 0; i < points_1.size(); i += stepHeight) {
 		pts1.push_back(vec2(points_1.at(i).x, points_1.at(i).y));
 	}
 
@@ -361,11 +363,23 @@ void MyWindow::Projection() {
 	glColor3ub(0.0f, 255.0f, 0.0f);
 
 	glBegin(GL_LINE_STRIP);
+	
 	for (int i = 0; i < model.size(); i++)
 	{
-		glVertex2f((50 * model[i].position.x + w() / 2), (50 * model[i].position.z + h() / 2));
-		//glVertex2f((50*model[i].position.x + w()/2), (50*model[i].position.y+h()/2));
-		//std::cout << "x: " << (model[i].position.x) << "y: " << (model[i].position.y) << std::endl;
+		switch (projection_switcher)
+		{
+		case 1:
+			glVertex2f((50 * model[i].position.x + w() / 2), (50 * model[i].position.z + h() / 2));
+			break;
+		case 2:
+			glVertex2f((50 * model[i].position.y + w() / 2), (50 * model[i].position.z + h() / 2));
+			break;
+		case 3:
+			glVertex2f((50 * model[i].position.x + w() / 2), (50 * model[i].position.y + h() / 2));
+			break;
+		default:
+			break;
+		}
 	}
 	glEnd();
 	glFlush();
@@ -574,7 +588,7 @@ void MyWindow::Draw3DModel()
 	glNormalPointer(GL_FLOAT, sizeof(Vertex), &model[0].normal);
 	glTexCoordPointer(3, GL_FLOAT, sizeof(Vertex), &model[0].position);
 	
-	glColor3ub(color, 255 - color, 255-color); // красный
+	glColor3ub(model_r, model_g, model_b); // красный
 
 	glDrawArrays(GL_TRIANGLES, 0, model.size());
 	glDisableClientState(GL_VERTEX_ARRAY);
@@ -611,6 +625,8 @@ std::vector<glm::vec2> MyWindow::toVec2(std::vector<point> points)
 	else
 		std::sort(points.begin(), points.end(), my_cmp);*/
 	//std::sort(points.begin(), points.end(), my_cmp);
+	if (stepHeight >= points.size())
+		stepHeight = 1;
 	for (size_t i = 0; i < points.size(); i+=stepHeight) {
 		pts.push_back(vec2(points.at(i).x, points.at(i).y));
 	}
@@ -641,8 +657,6 @@ void MyWindow::DrawD() {
 	glPopMatrix();
 }
 
-
-
 void MyWindow::DrawFromBezier() {
 	vector<point> vp;
 	for (size_t i = 0; i < pointsNumber; i++)
@@ -662,6 +676,8 @@ void MyWindow::DrawFromBezier() {
 		std::sort(vp.begin(), vp.end(), Utils::my_cmp);
 
 	vector<vec2> pts1;
+	if (stepHeight >= points_1.size())
+		stepHeight = 1;
 	for (size_t i = 0; i < points_1.size(); i += stepHeight) {
 		pts1.push_back(vec2(points_1.at(i).x / 20, points_1.at(i).y / 20));
 	}

@@ -45,3 +45,18 @@ bool Utils::my_cmp_x(const point & a, const point & b)
 {
 	return a.x < b.x;
 }
+
+bool Utils::sort_by_x(const vec3 a, const vec3 b)
+{
+	return a.x < b.x;
+}
+
+bool Utils::sort_by_y(const vec3 a, const vec3 b)
+{
+	return a.y < b.y;
+}
+
+bool Utils::sort_by_z(const vec3  a, const vec3 b)
+{
+	return a.z < b.z;
+}
