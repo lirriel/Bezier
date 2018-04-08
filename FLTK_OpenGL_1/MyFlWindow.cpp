@@ -489,44 +489,21 @@ void MyFlWindow::slider_steps(Fl_Widget* o, void* p) {
 
 void MyFlWindow::button_save(Fl_Widget* o, void* p) {
 	MyWindow *sw = ((MyFlWindow *)p)->myWindow;
-	MyFlWindow *app = (MyFlWindow*)p;
-	if (strlen(app->fc->filename()) == 0) {
-		button_save_as(o, p);
-	}
-	else {
-		ReadObj readobj;
-		readobj.Write_File("model_3d.obj", sw->model);
-	}
+	ReadObj readobj;
+	readobj.Write_File("model_3d.obj", sw->model);
 }
 
 void MyFlWindow::button_save_as(Fl_Widget * o, void * p){
-	//MyFlWindow* app = (MyFlWindow*)p;
-	//app->fc->type(Fl_Native_File_Chooser::BROWSE_SAVE_FILE);	// need this if file doesn't exist yet
-	//app->fc->title("Save As");
-	//switch (app->fc->show()) {
-	//case -1: break;	// Error
-	//case  1: break; 	// Cancel
-	//default:		// Choice
-	//	app->fc->preset_file(app->fc->filename());
-	//	ReadObj obj;
-	//	obj.Write_File(app->fc->filename(), app->myWindow->model);
-	//	break;
-	//}
-	Fl_Native_File_Chooser *chooser = new Fl_Native_File_Chooser();
-	chooser->type(Fl_Native_File_Chooser::BROWSE_SAVE_FILE);   // 'saveas' browser
-	chooser->title("Save As..");                               // optional title for chooser window
-	chooser->directory("/var/tmp");                            // optional starting directory
-	chooser->preset_file("untitled.txt");                      // optional default filename
-	chooser->filter("Text Files\t*.txt");                      // optional filter
-	switch (chooser->show()) {
-	case -1:    // ERROR
-		fprintf(stderr, "*** ERROR show() failed:%s\n", chooser->errmsg());
-		break;
-	case 1:     // CANCEL
-		fprintf(stderr, "*** CANCEL\n");
-		break;
-	default:    // USER PICKED A FILE
-		fprintf(stderr, "Filename was '%s'\n", chooser->filename());
+	MyFlWindow* app = (MyFlWindow*)p;
+	app->fc->type(Fl_Native_File_Chooser::BROWSE_SAVE_FILE);	// need this if file doesn't exist yet
+	app->fc->title("Save As");
+	switch (app->fc->show()) {
+	case -1: break;	// Error
+	case  1: break; 	// Cancel
+	default:		// Choice
+		app->fc->preset_file(app->fc->filename());
+		ReadObj obj;
+		obj.Write_File(app->fc->filename(), app->myWindow->model);
 		break;
 	}
 }
