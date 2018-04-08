@@ -4,8 +4,12 @@
 #include <FL\Fl_Window.H>
 #include <FL\Fl_Hor_Slider.H>
 #include <FL\Fl_Input.H>
+#include <Fl\Fl_Round_Button.H>
 #include <Fl\Fl_Check_Button.H>
 #include <FL\Fl_Button.H>
+#include <FL\Fl_Menu_Bar.H>
+#include <FL\Fl_Tabs.H>
+#include <FL\Fl_Group.H>
 #include "MyWindow.h"
 #include <string>
 
@@ -30,6 +34,19 @@ public:
 	Fl_Button* drawBezier;
 	Fl_Check_Button* project;
 	Fl_Button* saveModel;
+	Fl_Menu_Bar* menu;
+	Fl_Tabs* tabs;
+	// rgb settings
+	Fl_Input* red;
+	Fl_Input* green;
+	Fl_Input* blue;
+	//rgb for line
+	Fl_Input* redLine;
+	Fl_Input* greenLine;
+	Fl_Input* blueLine;
+	//axis control
+	Fl_Round_Button* around_x;
+	Fl_Round_Button* around_y;
 public:
 	static void get_int(Fl_Widget* i, void* v);
 	static void checkBox(Fl_Widget* w, void* d);

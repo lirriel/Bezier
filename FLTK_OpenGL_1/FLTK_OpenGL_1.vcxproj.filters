@@ -65,6 +65,9 @@
     <ClInclude Include="MyFlWindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Tooltip.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Text.obj">

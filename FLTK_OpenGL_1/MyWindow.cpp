@@ -1,7 +1,6 @@
 #include "MyWindow.h"
 
 #include <FL/Fl.H>             
-#include <GL/freeglut.h>
 #include <sstream>
 #include <algorithm>
 
@@ -532,6 +531,10 @@ void MyWindow::DrawBounds() {
 
 void MyWindow::Draw3DModel()
 {
+	glEnable(GL_TEXTURE_GEN_S);
+	glEnable(GL_TEXTURE_GEN_T);
+	glEnable(GL_TEXTURE_GEN_R);
+////////////////////////////////////////
 	glShadeModel(GL_SMOOTH);
 	glEnable(GL_COLOR_MATERIAL);
 	glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
@@ -549,6 +552,7 @@ void MyWindow::Draw3DModel()
 	glPolygonMode(GL_BACK, GL_LINE);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glShadeModel(GL_SMOOTH);
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -565,14 +569,17 @@ void MyWindow::Draw3DModel()
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_NORMAL_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	glVertexPointer(3, GL_FLOAT, sizeof(Vertex), &model[0].position);
 	glNormalPointer(GL_FLOAT, sizeof(Vertex), &model[0].normal);
-
+	glTexCoordPointer(3, GL_FLOAT, sizeof(Vertex), &model[0].position);
+	
 	glColor3ub(color, 255 - color, 255-color); // красный
 
 	glDrawArrays(GL_TRIANGLES, 0, model.size());
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_NORMAL_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
 void MyWindow::BuildNew()

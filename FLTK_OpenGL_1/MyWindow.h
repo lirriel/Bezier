@@ -5,12 +5,14 @@
 	#pragma warning(disable : 4083 4204 4244 4311 4312)
 	#include <Fl/Fl_Gl_Window.h>
 	#include <Fl/Gl.h>
+	#include <gl\freeglut.h>
 	#include <glm\glm.hpp>
 	#include <vector>
 	#include <FL/math.h>
 	#include <string>
 	#include "point.h"
 	#include "Vertex.h"
+	#include <GL\glaux.h>
 #pragma warning (pop)
 
 class MyWindow : public Fl_Gl_Window
@@ -32,6 +34,8 @@ public:
 
 	void myMouseMove(int xPosition, int yPosition, const MyWindow* mw);
 	void myPick(int state, int xPosition, int yPosition);
+	
+	AUX_RGBImageRec* image;
 
 ////////////////////////////////////////////
 	int color;
