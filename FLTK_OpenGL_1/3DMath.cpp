@@ -37,9 +37,6 @@ vec3 Vector(vec3 vPoint1, vec3 vPoint2)
 
 float Magnitude(vec3 vNormal)
 {
-	// This will give us the magnitude or "Norm" as some say of, our normal.
-	// The magnitude has to do with the length of the vector.  We use this
-	// information to normalize a vector, which gives it a length of 1.
 	// Here is the equation:  magnitude = sqrt(V.x^2 + V.y^2 + V.z^2)   Where V is the vector
 
 	return (float)sqrt( (vNormal.x * vNormal.x) + 
@@ -49,9 +46,6 @@ float Magnitude(vec3 vNormal)
 
 vec3 Normalize(vec3 vNormal) {
 	float magnitude = Magnitude(vNormal);				// Get the magnitude of our normal
-
-	// Now that we have the magnitude, we can divide our normal by that magnitude.
-	// That will make our normal a total length of 1.  This makes it easier to work with too.
 
 	vNormal.x /= magnitude;								// Divide the X value of our normal by it's magnitude
 	vNormal.y /= magnitude;								// Divide the Y value of our normal by it's magnitude

@@ -143,26 +143,26 @@ std::vector<Vertex> MyWindow::Lathe(const std::vector<vec2>& pts, unsigned int s
 			const vec3& UR = curLayer[j];     // upper-right
 
 			// triangle0: LL -> UR -> UL
-			const vec3 normal0 = normalize(cross(UR - LL, UL - LL));
+			const vec3 normal0 = Normalize(Cross(UR - LL, UL - LL));
 			//const vec3 normal0 = Normalize(Cross(UR - LL, UL - LL));
 			verts.push_back(Vertex(LL, normal0));
 			verts.push_back(Vertex(UR, normal0));
 			verts.push_back(Vertex(UL, normal0));
 
 			// triangle1: LL -> LR -> UR
-			const vec3 normal1 = normalize(cross(LR - LL, UL - LL));
+			const vec3 normal1 = Normalize(Cross(LR - LL, UL - LL));
 			verts.push_back(Vertex(LL, normal1));
 			verts.push_back(Vertex(LR, normal1));
 			verts.push_back(Vertex(UR, normal1));
 
 			// triangle2: LR -> UL -> UR
-			const vec3 normal2 = normalize(cross(UL - LR, UR - LR));
+			const vec3 normal2 = Normalize(Cross(UL - LR, UR - LR));
 			verts.push_back(Vertex(LR, normal2));
 			verts.push_back(Vertex(UL, normal2));
 			verts.push_back(Vertex(UR, normal2));
 
 			// triangle3: LR -> UL -> UR
-			const vec3 normal3 = normalize(cross(LL - LR, UR - LR));
+			const vec3 normal3 = Normalize(Cross(LL - LR, UR - LR));
 			verts.push_back(Vertex(LR, normal3));
 			verts.push_back(Vertex(LL, normal3));
 			verts.push_back(Vertex(UL, normal3));
