@@ -6,6 +6,7 @@
 #include <Fl\Fl_Round_Button.H>
 #include <Fl\Fl_Check_Button.H>
 #include <FL\Fl_Button.H>
+#include <FL\Fl_Choice.H>
 #include <FL\Fl_Menu_Bar.H>
 #include <FL\Fl_Tabs.H>
 #include <FL\Fl_Text_Buffer.H>
@@ -39,6 +40,7 @@ public:
 	Fl_Button* saveModel;
 	Fl_Menu_Bar* menu;
 	Fl_Tabs* tabs;
+	Fl_Choice* choose;
 	// rgb settings
 	Fl_Input* red;
 	Fl_Input* green;
@@ -55,7 +57,7 @@ public:
 	Fl_Round_Button* from_z;
 	// tab pointer
 	int tab = 1;
-
+	//files
 	Fl_Native_File_Chooser *fc;
 	Fl_Text_Buffer* tbuff; 
 	Fl_Text_Display* disp;
@@ -67,6 +69,7 @@ public:
 	static void checkBox_Project(Fl_Widget* w, void* d);
 	static void set_min(Fl_Widget* w, void *d);
 	static void set_number_of_points(Fl_Widget* w, void *d);
+	static void add_points(Fl_Widget* w, void* d);
 	static void set_max(Fl_Widget* w, void *d);
 	static void draw_Big_Button(Fl_Widget* w, void *d);
 	static void model_from_draw(Fl_Widget* w, void *d);
@@ -76,10 +79,12 @@ public:
 	static void sides_p(Fl_Widget* o, void* p);
 	static void slider_segments(Fl_Widget* o, void* p);
 	static void slider_steps(Fl_Widget* o, void* p);
+	static void set_tab4(Fl_Widget* o, void* p);
 
 	static void button_save(Fl_Widget* o, void* p);
 	static void button_save_as(Fl_Widget* o, void* p);
 	static void button_file_open(Fl_Widget* o, void* p);
+	static void button_exit(Fl_Widget* o, void* p);
 
 	static void setFigureR(Fl_Widget* o, void* p);
 	static void setFigureG(Fl_Widget* o, void* p);

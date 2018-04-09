@@ -7,10 +7,10 @@
 #include <FL\Fl.H>
 #include <errno.h>	// errno
 #include <FL\Fl_Box.H>
-#include <FL\Fl_Choice.H>
 using namespace glm;
 
 std::string s = "";
+int points = 0;
 
 MyFlWindow::MyFlWindow(int W, int H, const char*L): Fl_Window(W, H, L) {
 	Fl::scheme("gleam");
@@ -22,9 +22,10 @@ MyFlWindow::MyFlWindow(int W, int H, const char*L): Fl_Window(W, H, L) {
 
 	// Menu
 	Fl_Menu_Bar *menu = new Fl_Menu_Bar(0, 0, Fl::w(), 25);
-	menu->add("File/Load", 0, button_file_open, this);
-	menu->add("File/Save", 0, button_save, this);
-	menu->add("File/Save as", 0, button_save_as, this);
+	menu->add("File/Open", "^o", button_file_open, this, FL_MENU_DIVIDER);
+	menu->add("File/Save", "^s", button_save, this, FL_MENU_DIVIDER);
+	menu->add("File/Save as", "^a", button_save_as, this, FL_MENU_DIVIDER);
+	menu->add("Quit", "^q", button_exit, this, FL_MENU_DIVIDER);
 	c = fl_rgb_color(66, 66, 66);
 
 	// Settings group
@@ -194,7 +195,7 @@ MyFlWindow::MyFlWindow(int W, int H, const char*L): Fl_Window(W, H, L) {
 			addDotsInput->callback(set_number_of_points, this);
 			Fl_Button* addDotsButton = new Fl_Button(addDotsInput->x() + addDotsInput->w() + 10, addDotsInput->y(), 50, 30, "A D D");
 			addDotsButton->color(FL_WHITE);
-			addDotsButton->callback(set_number_of_points, this);
+			addDotsButton->callback(add_points, this);
 		}
 		drawBezier->end();
 		drawBezier->color(c);
@@ -203,12 +204,26 @@ MyFlWindow::MyFlWindow(int W, int H, const char*L): Fl_Window(W, H, L) {
 		// Draw from Baze
 		Fl_Group *drawFromBase = new Fl_Group(tabs->x(), tabs->y() + 20, tabs->w(), tabs->h() - 25, "Base");
 		{
-			Fl_Choice* choose = new Fl_Choice(drawFromBase->x() + 5, drawFromBase->y() + 30, drawFromBase->w() - 20, 30, "Basic line style");
+			choose = new Fl_Choice(drawFromBase->x() + 5, drawFromBase->y() + 30, drawFromBase->w() - 20, 30, "Basic line style");
 			choose->align(FL_ALIGN_TOP_LEFT);
 			choose->add("sin(x)");
 			choose->add("cos(x)");
 			choose->add("x^2");
 			choose->add("x^(0.5)");
+			choose->callback(set_tab4, this);
+			Fl_Box* params = new Fl_Box(FL_DOWN_FRAME, drawFromBase->x() + 10, choose->y() + choose->h() + 20, tabs->w() - 20, 90, "Set range");
+			{
+				Fl_Input* min = new Fl_Input(params->x() + 70, params->y() + 10, 60, 30, "Minimum");
+				min->value("");
+				min->color(FL_WHITE);
+				min->callback(set_min, this);
+
+				Fl_Input* max = new Fl_Input(params->x() + 70, min->y() + min->h() + 10, 60, 30, "Maximum");
+				max->value("");
+				max->color(FL_WHITE);
+				max->callback(set_max, this);
+			}
+			params->align(FL_ALIGN_TOP_LEFT);
 		}
 		drawFromBase->end();
 		drawFromBase->color(c);
@@ -393,8 +408,13 @@ void MyFlWindow::set_number_of_points(Fl_Widget* w, void *d)
 	sw->tab = 3;
 	sw->myWindow->bezier = true;
 	std::string s1 = ((Fl_Input*)w)->value();
-	int p = strtod(s1.c_str(), nullptr);
-	sw->myWindow->addPoints(p);
+	points = strtod(s1.c_str(), nullptr);
+}
+
+void MyFlWindow::add_points(Fl_Widget* w, void* d) {
+	MyFlWindow *sw = (MyFlWindow *)d;
+	sw->tab = 3;
+	sw->myWindow->addPoints(points);
 	sw->myWindow->redraw();
 }
 
@@ -487,10 +507,18 @@ void MyFlWindow::slider_steps(Fl_Widget* o, void* p) {
 	draw_Big_Button(o, p);
 }
 
+void MyFlWindow::set_tab4(Fl_Widget * o, void * p) {
+	((MyFlWindow*)p)->tab = 4;
+}
+
 void MyFlWindow::button_save(Fl_Widget* o, void* p) {
 	MyWindow *sw = ((MyFlWindow *)p)->myWindow;
 	ReadObj readobj;
 	readobj.Write_File("model_3d.obj", sw->model);
+}
+
+void MyFlWindow::button_exit(Fl_Widget* o, void* p) {
+	exit(0);
 }
 
 void MyFlWindow::button_save_as(Fl_Widget * o, void * p){
