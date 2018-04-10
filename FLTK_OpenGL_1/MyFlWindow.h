@@ -29,7 +29,6 @@ public:
 	Fl_Input* max;
 	Fl_Input* step;
 	Fl_Button* add;
-	Fl_Button* b;
 	Fl_Check_Button* checkButton;
 	Fl_Check_Button* checkButton_x;
 	Fl_Check_Button* bezier;
@@ -75,7 +74,6 @@ public:
 	static void model_from_draw(Fl_Widget* w, void *d);
 	static void set_build_bezier(Fl_Widget* w, void *d);
 	static void add_formula(Fl_Widget* w, void *d);
-	static void sides_cb(Fl_Widget* o, void* p);
 	static void sides_p(Fl_Widget* o, void* p);
 	static void slider_segments(Fl_Widget* o, void* p);
 	static void slider_steps(Fl_Widget* o, void* p);

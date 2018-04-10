@@ -238,108 +238,6 @@ MyFlWindow::MyFlWindow(int W, int H, const char*L): Fl_Window(W, H, L) {
 	Fl_Button* drawButton = new Fl_Button(tabs->x(), tabs->y() + tabs->h() + 10, 80, 40, "D R A W");
 	drawButton->color(FL_WHITE);
 	drawButton->callback(draw_Big_Button, this);
-	/*
-	tabs = new Fl_Tabs(10, 30, 300, Fl::h() - 40);
-	{
-		// Aaa tab
-		/*Fl_Group *aaa = new Fl_Group(620+10, 35, 500 - 20, 200 - 45, "Aaa");
-		{
-			Fl_Button *b1 = new Fl_Button(620 + 50, 60, 90, 25, "Button A1"); b1->color(88 + 1);
-			Fl_Button *b2 = new Fl_Button(620 + 50, 90, 90, 25, "Button A2"); b2->color(88 + 2);
-			Fl_Button *b3 = new Fl_Button(620 + 50, 120, 90, 25, "Button A3"); b3->color(88 + 3);
-		}
-		aaa->end();
-
-		// Bbb tab
-		/*Fl_Group *bbb = new Fl_Group(620 + 10, 35, 500 - 10, 200 - 35, "Bbb");
-		{
-			Fl_Button *b1 = new Fl_Button(620 + 50, 60, 90, 25, "Button B1"); b1->color(88 + 1);
-			Fl_Button *b2 = new Fl_Button(620 + 150, 60, 90, 25, "Button B2"); b2->color(88 + 3);
-			Fl_Button *b3 = new Fl_Button(620 + 250, 60, 90, 25, "Button B3"); b3->color(88 + 5);
-			Fl_Button *b4 = new Fl_Button(620 + 50, 90, 90, 25, "Button B4"); b4->color(88 + 2);
-			Fl_Button *b5 = new Fl_Button(620 + 150, 90, 90, 25, "Button B5"); b5->color(88 + 4);
-			Fl_Button *b6 = new Fl_Button(620 + 250, 90, 90, 25, "Button B6"); b6->color(88 + 6);
-		}
-		bbb->end();
-	}
-	tabs->end();
-	*/
-	/*
-	Fl_Menu_Bar *menu = new Fl_Menu_Bar(0, 0, 1200, 25);
-	menu->addButton("File/Quit");
-	menu->addButton("Edit/Change");
-	menu->addButton("Edit/Submenu/Aaa");
-	menu->addButton("Edit/Submenu/Bbb");
-
-	slider = new MySlider(620 + 50, 370, 500 - 60, 30, "Color:");
-	slider->align(FL_ALIGN_LEFT);
-	slider->value(6);
-	slider->step(1);
-	slider->bounds(3, 300);
-	slider->callback(sides_cb);
-
-	sliderSteps = new MySlider(620 + 50, 410, 500 - 80, 30, "Step:");
-	sliderSteps->align(FL_ALIGN_LEFT);
-	sliderSteps->value(1);
-	sliderSteps->step(1);
-	sliderSteps->bounds(1, 100);
-
-	sliderPerspective = new MySlider(620 + 50, 320, 500 - 60, 30, "Persp:");
-	sliderPerspective->align(FL_ALIGN_LEFT);
-	sliderPerspective->value(-100);
-	sliderPerspective->step(1);
-	sliderPerspective->bounds(-700, 100);
-
-	sliderSegments = new MySlider(620 + 70, 280, 500 - 80, 30, "Segments:");
-	sliderSegments->align(FL_ALIGN_LEFT);
-	sliderSegments->value(32);
-	sliderSegments->step(1);
-	sliderSegments->bounds(2, 100);
-
-	formula = new Fl_Input(620 + 60, 10+25, 300, 30, "Formula");
-	formula->value("");
-	min = new Fl_Input(620 + 50, 50+25, 50, 30, "MIN:");
-	min->value("");
-	max = new Fl_Input(620 + 150, 50+25, 50, 30, "MAX:");
-	max->value("");
-	step = new Fl_Input(620 + 250, 50+25, 50, 30, "STEP:");
-	step->value("");
-	addButton = new Fl_Button(620 + 330, 50+25, 50, 30, "Add");
-	b = new Fl_Button(620 + 10, 100+25, 50, 30, "DRAW");
-	b->color(FL_WHITE);
-	checkButton = new Fl_Check_Button(620 + 80, 100+25, 60, 30, "Draw");
-	checkButton->color(FL_WHITE); 
-	checkButton_x = new Fl_Check_Button(620 + 250, 100+25, 80, 30, "Around X");
-	checkButton_x->color(FL_WHITE);
-	bezier = new Fl_Check_Button(620 + 350, 100+25, 80, 30, "Bezier");
-	bezier->color(FL_WHITE);
-	build = new Fl_Button(620 + 150, 100+25, 70, 30, "Build");
-	build->color(FL_WHITE);
-	input_N = new Fl_Input(620 + 50, 150+25, 50, 30, "N:");
-	min->value("");
-	input->when(FL_WHEN_ENTER_KEY|FL_WHEN_NOT_CHANGED);
-	Fl_Button* drawBezier = new Fl_Button(620 + 150, 150+25, 80, 30, "Bezier");
-	Fl_Check_Button* project = new Fl_Check_Button(620 + 250, 150+25, 80, 30, "proj");
-	Fl_Button* saveModel = new Fl_Button(620 + 300, 150+25, 80, 30, "Save");
-
-	b->callback(draw_Big_Button, myWindow);
-	formula->callback(get_int);
-	checkButton->callback(drawByMouseButtonCallback, myWindow);
-	build->callback(model_from_draw, myWindow);
-	addButton->callback(add_formula, myWindow);
-	min->callback(set_min, myWindow);
-	max->callback(set_max, myWindow);
-	step->callback(set_step, myWindow);
-	sliderPerspective->callback(sides_p, myWindow);
-	checkButton_x->callback(checkBox_X, myWindow);
-	bezier->callback(start_Bezier, myWindow);
-	sliderSegments->callback(slider_segments, myWindow);
-	input_N->callback(set_number_of_points, myWindow);
-	drawBezier->callback(set_build_bezier, myWindow);
-	sliderSteps->callback(slider_steps, myWindow);
-	project->callback(checkBox_Project, myWindow);
-	saveModel->callback(button_save, myWindow);
-	*/
 
 	end();
 }
@@ -478,13 +376,6 @@ void MyFlWindow::add_formula(Fl_Widget* w, void *d)
 	sw->append = true;
 	ww->tab = 1;
 	draw_Big_Button(w, d);
-}
-
-// when you change the data, as in this callback, you must call redraw():
-void MyFlWindow::sides_cb(Fl_Widget* o, void* p) {
-	MyWindow *sw = (MyWindow *)p;
-	sw->color = int(((Fl_Slider *)o)->value());
-	sw->redraw();
 }
 
 // when you change the data, as in this callback, you must call redraw():

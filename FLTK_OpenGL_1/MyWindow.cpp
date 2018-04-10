@@ -94,7 +94,7 @@ void MyWindow::myMouseMove(int xPosition, int yPosition, const MyWindow* mw)
 // spin the pts array around the Z axis.
 // pts.x will become the radius, and pts.y will become the height
 // pts should be sorted by y-coordinate
-std::vector<Vertex> MyWindow::Lathe(const std::vector<vec2>& pts, unsigned int segments)
+std::vector<Vertex> MyWindow::Model_3D(const std::vector<vec2>& pts, unsigned int segments)
 {
 	segments = MyWindow::segments;
 	// precalculate circle points
@@ -184,7 +184,7 @@ MyWindow::MyWindow(int x, int y, int width, int height, char* title = 0)
 	pts.push_back(vec2(3, 1));
 	pts.push_back(vec2(4, 2));
 	pts.push_back(vec2(4, 3));
-	model = Lathe(pts, 32);
+	model = Model_3D(pts, 32);
 	pointsNumber = 7;
 
 	//end();
@@ -239,7 +239,6 @@ void MyWindow::displayLines()
 	for (int i = 0; i<poi_size; i++) {
 		drawCircle(2, poi_arr[i][0], poi_arr[i][1]);
 	}
-	//glutSwapBuffers();
 }
 
 void MyWindow::formula(string line) {
@@ -281,7 +280,7 @@ void MyWindow::formula(string line) {
 	}
 
 	std::vector<Vertex> model1;
-	model1 = Lathe(pts1, 32);
+	model1 = Model_3D(pts1, 32);
 	model.swap(model1);
 }
 
@@ -589,7 +588,7 @@ void MyWindow::Draw3DModel()
 void MyWindow::BuildNew()
 {
 	std::vector<Vertex> model1;
-	model1 = Lathe(toVec2(points), 32);
+	model1 = Model_3D(toVec2(points), 32);
 	std::vector<Vertex> model2;
 	model.swap(model1);
 }
@@ -672,7 +671,7 @@ void MyWindow::DrawFromBezier() {
 	}*/
 
 	std::vector<Vertex> model1;
-	model1 = Lathe(pts1, 32);
+	model1 = Model_3D(pts1, 32);
 	model.swap(model1);
 }
 

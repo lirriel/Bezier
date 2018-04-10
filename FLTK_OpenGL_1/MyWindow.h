@@ -23,7 +23,7 @@ public:
 	virtual void draw();
 
 	void InitializeGL();
-	std::vector<Vertex> Lathe(const std::vector<glm::vec2>& pts, unsigned int segments);
+	std::vector<Vertex> Model_3D(const std::vector<glm::vec2>& pts, unsigned int segments);
 	void DrawD();
 	void DrawFromBezier();
 	void formula(std::string line);
