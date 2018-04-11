@@ -104,8 +104,11 @@ public:
 	static void tab_bezier(Fl_Widget* o, void* p);
 	static void tab_base(Fl_Widget* o, void* p);
 
+	static void add_formula_text(Fl_Widget* o, void* p);
+	static void add_formula_button(Fl_Widget* o, void* p);
 
-private:
+	static void set_max_y_for_bezier(Fl_Widget* o, void* p);
+	static void set_max_x_for_bezier(Fl_Widget* o, void* p);
 
 public:
 	// APP WINDOW CONSTRUCTOR

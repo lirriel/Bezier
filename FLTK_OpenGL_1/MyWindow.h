@@ -11,6 +11,7 @@
 	#include <FL/math.h>
 	#include <string>
 	#include "point.h"
+	#include "Parser.h"
 	#include "Vertex.h"
 	#include <GL\glaux.h>
 #pragma warning (pop)
@@ -68,8 +69,12 @@ public:
 	double line_width = 1.0;
 
 	// actual size for draw by mouse
-	int max_X = w();
-	int max_Y = h();
+	double max_X = w();
+	double max_Y = h();
+
+	//actual size for bezier
+	double max_X_bezier = w();
+	double max_Y_bezier = h();
 
 	// data for model
 	std::vector<point> points;
@@ -98,6 +103,7 @@ private:
 	void drawProjection();
 	void drawBezier();
 	void drawByMouse();
+	Parser* error;
 
 	////////////////////////////////////////
 	float rotate = 0.0;

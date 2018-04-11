@@ -4,7 +4,6 @@
 #include <sstream>
 #include <algorithm>
 
-#include "Parser.h"
 #include "Utils.h"
 
 #include <time.h>
@@ -186,6 +185,7 @@ MyWindow::MyWindow(int x, int y, int width, int height, char* title = 0)
 	pts.push_back(vec2(4, 3));
 	model = Model_3D(pts, 32);
 	pointsNumber = 7;
+	error = new Parser(formulaText.c_str());
 
 	//end();
 	//formula("x-2");
@@ -256,6 +256,7 @@ void MyWindow::formula(string line) {
 		strs << i;
 		Utils::replaceAll(line1, "x", strs.str());
 		Parser parser(line1.c_str());
+		parser.for_error = error->parse();
 		auto p = parser.eval(parser.parse());
 		if (abs(p) > boundMax) boundMax = abs(p);
 		if (abs(i) > boundMax) boundMax = abs(i);
@@ -596,8 +597,8 @@ void MyWindow::BuildNew()
 std::vector<glm::vec2> MyWindow::toVec2(std::vector<point> points)
 {
 	vector<vec2> pts;
-	double rate_x = MyWindow::max_X * 2 / w();
-	double rate_y = MyWindow::max_Y * 2 / h();
+	double rate_x = MyWindow::max_X / w();
+	double rate_y = MyWindow::max_Y / h();
 	for (size_t i = 0; i < points.size(); i++) {
 		printf("x: %d, y: %d\n", points.at(i).x, points.at(i).y);
 		double x = - w() / 2 + points.at(i).x;
@@ -643,35 +644,23 @@ void MyWindow::DrawD() {
 }
 
 void MyWindow::DrawFromBezier() {
-	vector<point> vp;
-	for (size_t i = 0; i < pointsNumber; i++)
-	{
-		point p; 
-		p.x = ctrlPoints[i][0]; 
-		p.y = ctrlPoints[i][1];
-		vp.push_back(p);
-	}
 	if (is_X)
 		std::sort(points_1.begin(), points_1.end(), Utils::my_cmp_x);
 	else
 		std::sort(points_1.begin(), points_1.end(), Utils::my_cmp);
-	if (is_X)
-		std::sort(vp.begin(), vp.end(), Utils::my_cmp_x);
-	else
-		std::sort(vp.begin(), vp.end(), Utils::my_cmp);
 
 	vector<vec2> pts1;
 	if (stepHeight >= points_1.size())
 		stepHeight = 1;
+	double rate_x = max_X_bezier / w();
+	double rate_y = max_Y_bezier / h();
+
 	for (size_t i = 0; i < points_1.size(); i += stepHeight) {
-		pts1.push_back(vec2(points_1.at(i).x / 20, points_1.at(i).y / 20));
+		pts1.push_back(vec2(rate_x * points_1.at(i).x, rate_y * points_1.at(i).y));
 	}
-	/*for (size_t i = 0; i < vp.size(); i++) {
-		pts1.push_back(vec2(vp.at(i).x / 20, vp.at(i).y / 20));
-	}*/
 
 	std::vector<Vertex> model1;
-	model1 = Model_3D(pts1, 32);
+	model1 = Model_3D(pts1, segments);
 	model.swap(model1);
 }
 

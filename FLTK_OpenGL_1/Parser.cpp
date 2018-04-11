@@ -67,11 +67,11 @@ double Parser::eval(const Expression& e) {
 
 Expression Parser::parse_simple_expression() {
     auto token = parse_token();
-    if (token.empty()) throw std::runtime_error("Invalid input");
+    if (token.empty()) return for_error;
 
     if (token == "(") {
         auto result = parse();
-        if (parse_token() != ")") throw std::runtime_error("Expected ')'");
+		if (parse_token() != ")") return for_error;
         return result;
     }
 

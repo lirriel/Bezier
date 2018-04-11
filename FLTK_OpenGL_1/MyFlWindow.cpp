@@ -13,7 +13,7 @@ std::string s = "";
 int points = 0;
 
 MyFlWindow::MyFlWindow(int W, int H, const char*L): Fl_Window(W, H, L) {
-	Fl::scheme("gleam");
+	Fl::scheme("gtk+");
 	Fl_Color c = fl_rgb_color(117, 117, 117);
 	this->color(c);
 
@@ -98,7 +98,7 @@ MyFlWindow::MyFlWindow(int W, int H, const char*L): Fl_Window(W, H, L) {
 
 	myWindow = new MyWindow(settings->x() + settings->w() + 20, settings->y(), 800, 800, "");
 
-	c = fl_rgb_color(255, 255, 255);
+	c = fl_rgb_color(130, 130, 130);
 
 	tabs = new Fl_Tabs(myWindow->x() + myWindow->w() + 10, settings->y(), Fl::w() - (myWindow->x() + myWindow->w() + 20), 500);
 	{
@@ -140,7 +140,7 @@ MyFlWindow::MyFlWindow(int W, int H, const char*L): Fl_Window(W, H, L) {
 		// Draw tab
 		Fl_Group *drawByMouse= new Fl_Group(tabs->x(), tabs->y() + 20, tabs->w(), tabs->h() - 25, "Draw");
 		{
-			Fl_Box* lineColors = new Fl_Box(FL_DOWN_FRAME, drawByMouse->x() + 5, drawByMouse->y() + 20, drawByMouse->w() - 10, 45, "Line color");
+			Fl_Box* lineColors = new Fl_Box(FL_DOWN_FRAME, drawByMouse->x() + 10, drawByMouse->y() + 20, drawByMouse->w() - 20, 45, "Line color");
 			{
 				redLine = new Fl_Input(lineColors->x() + 35, lineColors->y() + 10, 50, 25, "Red");
 				redLine->callback(setLineR, this);
@@ -151,24 +151,28 @@ MyFlWindow::MyFlWindow(int W, int H, const char*L): Fl_Window(W, H, L) {
 			}
 			lineColors->align(FL_ALIGN_TOP_LEFT);
 
-			MySlider* sliderWidth = new MySlider(drawByMouse->x() + 5, lineColors->y() + lineColors->h() + 20, drawByMouse->w() - 10, 25, "Width");
+			MySlider* sliderWidth = new MySlider(drawByMouse->x() + 10, lineColors->y() + lineColors->h() + 20, drawByMouse->w() - 20, 25, "Width");
 			sliderWidth->align(FL_ALIGN_TOP_LEFT);
 			sliderWidth->value(1);
 			sliderWidth->step(1);
 			sliderWidth->bounds(1, 10);
 			sliderWidth->color(FL_WHITE);
 
-			Fl_Input* rangeX = new Fl_Input(drawByMouse->x() + 70, sliderWidth->y() + sliderWidth->h() + 10, 60, 30, "X range");
-			rangeX->value("");
-			rangeX->color(FL_WHITE);
-			rangeX->callback(set_max_X, this);
+			Fl_Box* mouseRange = new Fl_Box(FL_DOWN_FRAME, drawByMouse->x() + 10, sliderWidth->y() + sliderWidth->h() + 20, drawByMouse->w() - 20, 90, "Set range");
+			{
+				Fl_Input* rangeX = new Fl_Input(mouseRange->x() + 70, mouseRange->y() + 10, 60, 30, "X range");
+				rangeX->value("");
+				rangeX->color(FL_WHITE);
+				rangeX->callback(set_max_X, this);
 
-			Fl_Input* rangeY = new Fl_Input(drawByMouse->x() + 70, rangeX->y() + rangeX->h() + 10, 60, 30, "Y range");
-			rangeY->value("");
-			rangeY->color(FL_WHITE);
-			rangeY->callback(set_max_Y, this);
+				Fl_Input* rangeY = new Fl_Input(mouseRange->x() + 70, rangeX->y() + rangeX->h() + 10, 60, 30, "Y range");
+				rangeY->value("");
+				rangeY->color(FL_WHITE);
+				rangeY->callback(set_max_Y, this);
+			}
+			mouseRange->align(FL_ALIGN_TOP_LEFT);
 
-			Fl_Button* draw_by_mouse_button = new Fl_Button(drawByMouse->x() + 10, rangeY->y() + rangeY->h() + 10, 200, 30, "START DRAWING");
+			Fl_Button* draw_by_mouse_button = new Fl_Button(drawByMouse->x() + 10, mouseRange->y() + mouseRange->h() + 10, 200, 30, "START DRAWING");
 			draw_by_mouse_button->color(FL_WHITE);
 			draw_by_mouse_button->callback(drawByMouseButtonCallback, this);
 		}
@@ -179,23 +183,34 @@ MyFlWindow::MyFlWindow(int W, int H, const char*L): Fl_Window(W, H, L) {
 		// Draw tab
 		Fl_Group *drawBezier = new Fl_Group(tabs->x(), tabs->y() + 20, tabs->w(), tabs->h() - 25, "Bezier");
 		{
-			Fl_Input* x_max = new Fl_Input(drawBezier->x() + 90, drawBezier->y() + 10, 60, 30, "X max value");
-			x_max->value("");
-			x_max->color(FL_WHITE);
+			Fl_Box *drawBezierRange = new Fl_Box(FL_DOWN_FRAME, tabs->x() + 10, drawBezier->y() + 25, tabs->w() - 20, 100, "Set range");
+			{
+				Fl_Input* x_max = new Fl_Input(drawBezierRange->x() + 90, drawBezierRange->y() + 10, 60, 30, "X max value");
+				x_max->value("");
+				x_max->color(FL_WHITE);
+				x_max->callback(set_max_x_for_bezier, this);
 
-			Fl_Input* y_max = new Fl_Input(drawBezier->x() + 90, x_max->y() + x_max->h() + 10, 60, 30, "Y max value");
-			y_max->value("");
-			y_max->color(FL_WHITE);
+				Fl_Input* y_max = new Fl_Input(drawBezierRange->x() + 90, x_max->y() + x_max->h() + 10, 60, 30, "Y max value");
+				y_max->value("");
+				y_max->color(FL_WHITE);
+				y_max->callback(set_max_y_for_bezier, this);
+			}
+			drawBezierRange->align(FL_ALIGN_TOP_LEFT);
 
-			Fl_Button* drawBezierButton = new Fl_Button(drawBezier->x() + 20, y_max->h() + y_max->y() + 30, 150, 30, "START BEZIER LINE");
+			Fl_Button* drawBezierButton = new Fl_Button(drawBezier->x() + 10, drawBezierRange->h() + drawBezierRange->y() + 10, 150, 30, "START BEZIER LINE");
 			drawBezierButton->color(FL_WHITE);
 			drawBezierButton->callback(start_Bezier, this);
 
-			Fl_Input* addDotsInput = new Fl_Input(drawBezier->x() + 120, drawBezierButton->h() + drawBezierButton->y() + 30, 50, 30, "Add dots number");
-			addDotsInput->callback(set_number_of_points, this);
-			Fl_Button* addDotsButton = new Fl_Button(addDotsInput->x() + addDotsInput->w() + 10, addDotsInput->y(), 50, 30, "A D D");
-			addDotsButton->color(FL_WHITE);
-			addDotsButton->callback(add_points, this);
+			Fl_Box* addDotsGroup = new Fl_Box(FL_DOWN_FRAME, tabs->x() + 10, drawBezierButton->y() + drawBezierButton->h() + 20, tabs->w() - 20, 70, "Set dots");
+			{
+				Fl_Input* addDotsInput = new Fl_Input(addDotsGroup->x() + 120, addDotsGroup->y() + 20, 50, 30, "Add dots number");
+				addDotsInput->callback(set_number_of_points, this);
+
+				Fl_Button* addDotsButton = new Fl_Button(addDotsInput->x() + addDotsInput->w() + 10, addDotsInput->y(), 60, 30, "A D D");
+				addDotsButton->color(FL_WHITE);
+				addDotsButton->callback(add_points, this);
+			}
+			addDotsGroup->align(FL_ALIGN_TOP_LEFT);
 		}
 		drawBezier->end();
 		drawBezier->color(c);
@@ -204,13 +219,13 @@ MyFlWindow::MyFlWindow(int W, int H, const char*L): Fl_Window(W, H, L) {
 		// Draw from Baze
 		Fl_Group *drawFromBase = new Fl_Group(tabs->x(), tabs->y() + 20, tabs->w(), tabs->h() - 25, "Base");
 		{
-			choose = new Fl_Choice(drawFromBase->x() + 5, drawFromBase->y() + 30, drawFromBase->w() - 20, 30, "Basic line style");
+			choose = new Fl_Choice(drawFromBase->x() + 10, drawFromBase->y() + 30, drawFromBase->w() - 20, 30, "Basic line style");
 			choose->align(FL_ALIGN_TOP_LEFT);
-			choose->add("sin(x)");
-			choose->add("cos(x)");
-			choose->add("x^2");
-			choose->add("x^(0.5)");
-			choose->callback(set_tab4, this);
+			choose->add("sin(x)", 0, set_tab4, this);
+			choose->add("cos(x)", 0, set_tab4, this);
+			choose->add("x^2", 0, set_tab4, this);
+			choose->add("x^(0.5)", 0, set_tab4, this);
+			
 			Fl_Box* params = new Fl_Box(FL_DOWN_FRAME, drawFromBase->x() + 10, choose->y() + choose->h() + 20, tabs->w() - 20, 90, "Set range");
 			{
 				Fl_Input* min = new Fl_Input(params->x() + 70, params->y() + 10, 60, 30, "Minimum");
@@ -224,6 +239,20 @@ MyFlWindow::MyFlWindow(int W, int H, const char*L): Fl_Window(W, H, L) {
 				max->callback(set_max, this);
 			}
 			params->align(FL_ALIGN_TOP_LEFT);
+
+
+			Fl_Box* add_to_base = new Fl_Box(FL_DOWN_FRAME, drawFromBase->x() + 10, params->y() + params->h() + 20, tabs->w() - 20, 50, "Add to base");
+			{
+				Fl_Input* addFormula = new Fl_Input(add_to_base->x() + 90, add_to_base->y() + 10, 80, 30, "Add formula");
+				addFormula->value("");
+				addFormula->color(FL_WHITE);
+				addFormula->callback(add_formula_text, this);
+
+				Fl_Button* add = new Fl_Button(addFormula->x() + addFormula->w() + 10, add_to_base->y() + 10, 90, 30, "Add to base");
+				add->color(FL_WHITE);
+				add->callback(add_formula_button, this);
+			}
+			add_to_base->align(FL_ALIGN_TOP_LEFT);
 		}
 		drawFromBase->end();
 		drawFromBase->color(c);
@@ -232,7 +261,7 @@ MyFlWindow::MyFlWindow(int W, int H, const char*L): Fl_Window(W, H, L) {
 	c = fl_rgb_color(81, 81, 81);
 	tabs->color(c);
 	c = fl_rgb_color(130, 130, 130);
-	tabs->selection_color(c);
+	//tabs->selection_color(c);
 	tabs->end();
 
 	Fl_Button* drawButton = new Fl_Button(tabs->x(), tabs->y() + tabs->h() + 10, 80, 40, "D R A W");
@@ -352,6 +381,12 @@ void MyFlWindow::draw_Big_Button(Fl_Widget* w, void *d)
 		sw->DrawFromBezier();
 		sw->redraw();
 	}
+	else if (ww->tab == 4) {
+		sw->bezier = false;
+		sw->draw_check = false;
+		sw->formula(s);
+		sw->redraw();
+	}
 }
 
 void MyFlWindow::model_from_draw(Fl_Widget* w, void *d)
@@ -400,6 +435,8 @@ void MyFlWindow::slider_steps(Fl_Widget* o, void* p) {
 
 void MyFlWindow::set_tab4(Fl_Widget * o, void * p) {
 	((MyFlWindow*)p)->tab = 4;
+	s = ((Fl_Choice*)o)->text();
+	int t = 0;
 }
 
 void MyFlWindow::button_save(Fl_Widget* o, void* p) {
@@ -599,3 +636,29 @@ void MyFlWindow::tab_base(Fl_Widget * o, void * p)
 {
 	((MyFlWindow*)p)->tab = 4;
 }
+
+void MyFlWindow::add_formula_text(Fl_Widget * o, void * p) {
+	s = ((Fl_Input*)o)->value();
+}
+
+void MyFlWindow::add_formula_button(Fl_Widget * o, void * p) {
+	MyFlWindow* w = (MyFlWindow*)p;
+	w->choose->add(s.c_str(), 0, w->set_tab4, w);
+}
+
+void MyFlWindow::set_max_y_for_bezier(Fl_Widget * o, void * p) {
+	MyFlWindow* ww = (MyFlWindow *)p;
+	ww->tab = 3;
+	MyWindow* sw = ww->myWindow;
+	std::string s1 = ((Fl_Input*)o)->value();
+	sw->max_X_bezier = abs(strtod(s1.c_str(), nullptr));
+}
+
+void MyFlWindow::set_max_x_for_bezier(Fl_Widget * o, void * p) {
+	MyFlWindow* ww = (MyFlWindow *)p;
+	ww->tab = 3;
+	MyWindow* sw = ww->myWindow;
+	std::string s1 = ((Fl_Input*)o)->value();
+	sw->max_Y_bezier = abs(strtod(s1.c_str(), nullptr));
+}
+

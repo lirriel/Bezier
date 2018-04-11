@@ -11,7 +11,7 @@ struct Expression {
     Expression(std::string token) : token(token) {}
     Expression(std::string token, Expression a) : token(token), args{ a } {}
     Expression(std::string token, Expression a, Expression b) : token(token), args{ a, b } {}
-
+	Expression() {}
     std::string token;
     std::vector<Expression> args;
 };
@@ -21,6 +21,8 @@ public:
     explicit Parser(const char* input) : input(input) {}
     Expression parse();
 	double eval(const Expression& e);
+	Expression for_error;
+
 private:
     std::string parse_token();
     Expression parse_simple_expression();
