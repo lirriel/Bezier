@@ -3,7 +3,7 @@
 #include <FL/Fl.H>             
 #include <sstream>
 #include <algorithm>
-
+#include <GL\GL.h>
 #include "Utils.h"
 
 #include <time.h>
@@ -533,6 +533,7 @@ void MyWindow::DrawBounds() {
 	glEndList();
 }
 
+
 void MyWindow::Draw3DModel()
 {
 	glEnable(GL_TEXTURE_GEN_S);
@@ -545,7 +546,7 @@ void MyWindow::Draw3DModel()
 	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
 	glEnable(GL_LIGHTING);
 
-	float sp[4] = { 1,1,1,1 };
+	float sp[4] = { color1, color2, color3 };
 	glEnable(GL_LIGHT3);
 	glEnable(GL_LIGHT5);
 	glEnable(GL_LIGHT6);
@@ -558,8 +559,10 @@ void MyWindow::Draw3DModel()
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	GLfloat position[] = { 0, 0, 1.0, 0 };
+	GLfloat lights[] = {color1, color2, color3};
 
 	glLightfv(GL_LIGHT0, GL_POSITION, position);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, lights);
 
 	glPolygonMode(GL_FRONT, GL_FILL);
 	glPolygonMode(GL_BACK, GL_LINE);
@@ -597,10 +600,15 @@ void MyWindow::Draw3DModel()
 	
 	glColor3ub(model_r, model_g, model_b); // красный
 
+	glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
+	glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
+	glTexGeni(GL_R, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
+
 	glDrawArrays(GL_TRIANGLES, 0, model.size());
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
 }
 
 void MyWindow::BuildNew()

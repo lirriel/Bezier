@@ -92,6 +92,11 @@ public:
 	static void rotate_x(Fl_Widget* o, void* p);
 	static void rotate_y(Fl_Widget* o, void* p);
 	static void rotate_z(Fl_Widget* o, void* p);
+
+	// lighting
+	static void light_x(Fl_Widget* o, void* p);
+	static void light_y(Fl_Widget* o, void* p);
+	static void light_z(Fl_Widget* o, void* p);
 	
 	static void slider_segments(Fl_Widget* o, void* p);
 	static void slider_steps(Fl_Widget* o, void* p);

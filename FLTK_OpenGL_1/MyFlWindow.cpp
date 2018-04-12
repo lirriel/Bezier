@@ -33,7 +33,7 @@ MyFlWindow::MyFlWindow(int W, int H, const char*L): Fl_Window(W, H, L) {
 	c = fl_rgb_color(66, 66, 66);
 
 	// Settings group
-	Fl_Box* settings = new Fl_Box(FL_SHADOW_FRAME, 10, menu->h() + 20, 320, Fl::h() - 50, "Settings");
+	Fl_Box* settings = new Fl_Box(FL_SHADOW_FRAME, 10, menu->h() + 20, 320, Fl::h() - 10, "Settings");
 	{
 		Fl_Box* colors = new Fl_Box(FL_DOWN_FRAME, settings->x() + 10, settings->y() + 20, settings->w() - 20, 45, "Colors");
 		{
@@ -86,7 +86,7 @@ MyFlWindow::MyFlWindow(int W, int H, const char*L): Fl_Window(W, H, L) {
 
 		Fl_Box* viewSettings = new Fl_Box(FL_DOWN_FRAME, settings->x() + 10, drawDetails->y() + drawDetails->h() + 20, settings->w() - 20, 150, "View");
 		{
-			sliderPerspective = new MySlider(viewSettings->x() + 5, viewSettings->y() + 20, viewSettings->w() - 10, 25, "Perspective");
+			sliderPerspective = new MySlider(viewSettings->x() + 5, viewSettings->y() + 20, viewSettings->w() - 10, 25, "Remoteness");
 			sliderPerspective->align(FL_ALIGN_TOP_LEFT);
 			sliderPerspective->value(20);
 			sliderPerspective->step(1);
@@ -210,6 +210,42 @@ MyFlWindow::MyFlWindow(int W, int H, const char*L): Fl_Window(W, H, L) {
 		projection->align(FL_ALIGN_TOP_LEFT);
 		projection->labelfont(FL_COURIER);
 		projection->labelsize(16); 
+
+		Fl_Box* lighting = new Fl_Box(FL_DOWN_FRAME, settings->x() + 10, projection->y() + projection->h() + 20, settings->w() - 20, 80, "Lighting");
+		{
+			MySlider* light_x_slider = new MySlider(lighting->x() + 5, lighting->y() + 5, lighting->w() - 10, 20);
+			light_x_slider->value(0);
+			light_x_slider->step(0.5);
+			light_x_slider->bounds(0, 15);
+			light_x_slider->callback(light_x, this);
+			light_x_slider->labelfont(FL_COURIER);
+			light_x_slider->labelsize(16);
+			light_x_slider->selection_color(c1);
+			light_x_slider->color(FL_WHITE);
+
+			MySlider* light_y_slider = new MySlider(lighting->x() + 5, light_x_slider->y() + light_x_slider->h() + 5, lighting->w() - 10, 20);
+			light_y_slider->value(0);
+			light_y_slider->step(0.1);
+			light_y_slider->bounds(0, 15); 
+			light_y_slider->callback(light_y, this);
+			light_y_slider->labelfont(FL_COURIER);
+			light_y_slider->labelsize(16);
+			light_y_slider->selection_color(c1);
+			light_y_slider->color(FL_WHITE);
+
+			MySlider* light_z_slider = new MySlider(lighting->x() + 5, light_y_slider->y() + light_y_slider->h() + 5, lighting->w() - 10, 20);
+			light_z_slider->value(0);
+			light_z_slider->step(0.5);
+			light_z_slider->bounds(0, 15); 
+			light_z_slider->callback(light_z, this);
+			light_z_slider->labelfont(FL_COURIER);
+			light_z_slider->labelsize(16);
+			light_z_slider->selection_color(c1);
+			light_z_slider->color(FL_WHITE);
+		}
+		lighting->align(FL_ALIGN_TOP_LEFT);
+		lighting->labelfont(FL_COURIER);
+		lighting->labelsize(14);
 	}
 	c = fl_rgb_color(79, 79, 79);
 	settings->color(c);
@@ -675,6 +711,25 @@ void MyFlWindow::rotate_z(Fl_Widget * o, void * p)
 	sw->myWindow->rotate_z = int(((Fl_Slider *)o)->value());
 	sw->myWindow->redraw();
 }
+
+void MyFlWindow::light_x(Fl_Widget * o, void * p) {
+	MyWindow *sw = ((MyFlWindow *)p)->myWindow;
+	sw->color1 = int(((Fl_Slider *)o)->value());
+	sw->redraw();
+}
+
+void MyFlWindow::light_y(Fl_Widget * o, void * p) {
+	MyWindow *sw = ((MyFlWindow *)p)->myWindow;
+	sw->color1 = int(((Fl_Slider *)o)->value());
+	sw->redraw();
+}
+
+void MyFlWindow::light_z(Fl_Widget * o, void * p) {
+	MyWindow *sw = ((MyFlWindow *)p)->myWindow;
+	sw->color3 = int(((Fl_Slider *)o)->value());
+	sw->redraw();
+}
+
 
 void MyFlWindow::slider_segments(Fl_Widget* o, void* p) {
 	MyWindow *sw = ((MyFlWindow *)p)->myWindow;

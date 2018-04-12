@@ -62,6 +62,11 @@ public:
 	int model_g = 16;
 	int model_b = 760;
 
+	//light
+	double color1 = 0;
+	double color2 = 0;
+	double color3 = 0;
+
 	// line colors
 	int line_r = 256;
 	int line_g = 160;
