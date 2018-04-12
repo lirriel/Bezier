@@ -80,7 +80,17 @@ public:
 	std::vector<point> points;
 	std::vector<point> points_1;
 	
+	// perspective
 	int perspective;
+	int translateF_y = 0;
+	int translateF_x = 0;
+	bool enablesliderRot = false;
+
+	// rotation
+	int rotate_x = 0;
+	int rotate_y = 1;
+	int rotate_z = 0;
+
 	int projection_switcher = 1;
 	
 	int segments = 32;

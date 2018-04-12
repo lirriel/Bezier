@@ -538,18 +538,27 @@ void MyWindow::Draw3DModel()
 	glEnable(GL_TEXTURE_GEN_S);
 	glEnable(GL_TEXTURE_GEN_T);
 	glEnable(GL_TEXTURE_GEN_R);
-////////////////////////////////////////
+
 	glShadeModel(GL_SMOOTH);
 	glEnable(GL_COLOR_MATERIAL);
 	glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
 	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
 	glEnable(GL_LIGHTING);
 
+	float sp[4] = { 1,1,1,1 };
+	glEnable(GL_LIGHT3);
+	glEnable(GL_LIGHT5);
+	glEnable(GL_LIGHT6);
+	glLightfv(GL_LIGHT3, GL_SPECULAR, sp);
+	glLightfv(GL_LIGHT5, GL_SPECULAR, sp);
+	glLightfv(GL_LIGHT6, GL_SPECULAR, sp);
+
 	// set up "headlamp"-like light
 	glEnable(GL_LIGHT0);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	GLfloat position[] = { 0, 0, 1, 0 };
+	GLfloat position[] = { 0, 0, 1.0, 0 };
+
 	glLightfv(GL_LIGHT0, GL_POSITION, position);
 
 	glPolygonMode(GL_FRONT, GL_FILL);
@@ -565,11 +574,19 @@ void MyWindow::Draw3DModel()
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	glTranslatef(0, 0, perspective);
+	glTranslatef(translateF_x, translateF_y, perspective);
 
 	glPushMatrix();
-	glRotatef(curRot.x % 360, 0, 1, 0);
-	glRotatef(-curRot.y % 360, 1, 0, 0);
+
+	if (!enablesliderRot)
+	{
+		glRotatef(curRot.x % 360, 0, 1, 0);
+		glRotatef(-curRot.y % 360, 1, 0, 0); 
+	} else {
+		glRotatef(rotate_y, 0, 1, 0);
+		glRotatef(rotate_x, 1, 0, 0);
+		glRotatef(rotate_z, 0, 0, 1);
+	}
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_NORMAL_ARRAY);
@@ -706,6 +723,7 @@ void MyWindow::drawByMouse() {
 	glLoadIdentity();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	glEnable(GL_LINE_SMOOTH);
 	glLineWidth(line_width);
 	glBegin(GL_LINE_STRIP);
 	glColor3ub(line_r, line_g, line_b);

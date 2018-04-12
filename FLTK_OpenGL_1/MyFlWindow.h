@@ -22,8 +22,16 @@ public:
 	MyWindow* myWindow;
 	MySlider* slider;
 	MySlider* sliderSteps;
+	
 	MySlider* sliderPerspective;
 	MySlider* sliderSegments;
+	MySlider* sliderPerspective_y;
+	MySlider* sliderPerspective_x;
+	
+	MySlider* sliderRotate_x;
+	MySlider* sliderRotate_y;
+	MySlider* sliderRotate_z;
+	
 	Fl_Input* formula;
 	Fl_Input* min;
 	Fl_Input* max;
@@ -74,7 +82,17 @@ public:
 	static void model_from_draw(Fl_Widget* w, void *d);
 	static void set_build_bezier(Fl_Widget* w, void *d);
 	static void add_formula(Fl_Widget* w, void *d);
+	// translate_f
 	static void sides_p(Fl_Widget* o, void* p);
+	static void sliderPerspectiveCall_x(Fl_Widget* o, void* p);
+	static void sliderPerspectiveCall_y(Fl_Widget* o, void* p);
+
+	// rotate_f
+	static void rotate_enable(Fl_Widget* o, void* p);
+	static void rotate_x(Fl_Widget* o, void* p);
+	static void rotate_y(Fl_Widget* o, void* p);
+	static void rotate_z(Fl_Widget* o, void* p);
+	
 	static void slider_segments(Fl_Widget* o, void* p);
 	static void slider_steps(Fl_Widget* o, void* p);
 	static void set_tab4(Fl_Widget* o, void* p);
